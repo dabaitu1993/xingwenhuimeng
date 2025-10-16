@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=design-full-1" />
 </head>
 <body>
   <!-- 英雄区（大Banner与大标题） -->
@@ -42,10 +42,10 @@
             
           </article>
 
-          <!-- 天九先导片 -->
+          <!-- 天九先导片（路径修正） -->
           <article class="card work-card" data-category="微电影">
             <div class="cover gradient landscape">
-              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/天九先导片.mp4" muted playsinline loop preload="none"></video>
+              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/%E5%BE%AE%E7%94%B5%E5%BD%B1/%E5%A4%A9%E4%B9%9D%E5%85%88%E5%AF%BC%E7%89%87.mp4" muted playsinline loop preload="none"></video>
             </div>
             <div class="work-head"><h3>天九先导片</h3></div>
             <p class="work-desc">品牌先导内容，压缩信息密度与节奏以提升传播效率。</p>
@@ -87,16 +87,41 @@
       <!-- 2. 带货视频（横竖混合：自适应网格） -->
       <div class="portfolio-section">
         <h3>带货视频</h3>
-        <div class="portfolio-grid mixed">
-          <article class="card work-card">
-            <div class="cover gradient portrait"></div>
-            <div class="work-head"><h3>带货种草短视频</h3></div>
-            <p class="work-desc">竖屏适配移动端，突出商品细节。</p>
+        <div class="portfolio-grid mixed goods" data-source="https://my-website-assets.tos-cn-beijing.volces.com/带货视频/">
+          <!-- 中东素人风（常见竖版） -->
+          <article class="card work-card" data-category="带货视频">
+            <div class="cover gradient portrait">
+              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/带货视频/中东素人风带货视频.mp4" muted playsinline preload="none"></video>
+            </div>
+            <div class="work-head"><h3>中东素人风带货视频</h3></div>
+            <p class="work-desc">真实素人风格，强调商品卖点的自然展现。</p>
           </article>
-          <article class="card work-card">
-            <div class="cover gradient landscape"></div>
-            <div class="work-head"><h3>带货直播剪辑</h3></div>
-            <p class="work-desc">横屏更适合信息密度较高的剪辑合集。</p>
+
+          <!-- 带货视频 1（横版/示例） -->
+          <article class="card work-card" data-category="带货视频">
+            <div class="cover gradient landscape">
+              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/带货视频/带货视频%201.mp4" muted playsinline preload="none"></video>
+            </div>
+            <div class="work-head"><h3>带货视频 1</h3></div>
+            <p class="work-desc">信息密度更高的横版剪辑呈现。</p>
+          </article>
+
+          <!-- 带货视频 2（横版/示例） -->
+          <article class="card work-card" data-category="带货视频">
+            <div class="cover gradient landscape">
+              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/带货视频/带货视频%202.mp4" muted playsinline preload="none"></video>
+            </div>
+            <div class="work-head"><h3>带货视频 2</h3></div>
+            <p class="work-desc">多镜头切换，突出商品场景化展示。</p>
+          </article>
+
+          <!-- 首饰模特上身（常见竖版） -->
+          <article class="card work-card" data-category="带货视频">
+            <div class="cover gradient portrait">
+              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/带货视频/首饰模特上身.mp4" muted playsinline preload="none"></video>
+            </div>
+            <div class="work-head"><h3>首饰模特上身</h3></div>
+            <p class="work-desc">高质感光影与近景细节，强化购买欲。</p>
           </article>
         </div>
       </div>
@@ -104,34 +129,51 @@
       <!-- 3. TVC 广告（横竖混合：自适应网格） -->
       <div class="portfolio-section">
         <h3>TVC 广告</h3>
-        <div class="portfolio-grid mixed">
-          <article class="card work-card">
-            <div class="cover gradient landscape"></div>
-            <div class="work-head"><h3>TVC 官方宣发片</h3></div>
-            <p class="work-desc">示例条目；后续补充文案与外链。</p>
+        <div class="portfolio-grid mixed tvc" data-source="https://my-website-assets.tos-cn-beijing.volces.com/TVC 广告/">
+          <!-- TVC 1 -->
+          <article class="card work-card" data-category="TVC 广告">
+            <div class="cover gradient landscape">
+              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/TVC%20广告/TVC1.mp4" muted playsinline preload="none"></video>
+            </div>
+            <div class="work-head"><h3>TVC 1</h3></div>
+            <p class="work-desc">品牌 TVC 广告成片（横版）。</p>
           </article>
-          <article class="card work-card">
-            <div class="cover gradient portrait"></div>
-            <div class="work-head"><h3>TVC 竖版切片</h3></div>
-            <p class="work-desc">竖屏适配社媒频道的推广素材。</p>
+
+          <!-- TVC 2 -->
+          <article class="card work-card" data-category="TVC 广告">
+            <div class="cover gradient landscape">
+              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/TVC%20广告/TVC2.mp4" muted playsinline preload="none"></video>
+            </div>
+            <div class="work-head"><h3>TVC 2</h3></div>
+            <p class="work-desc">品牌 TVC 广告成片（横版）。</p>
+          </article>
+
+          <!-- TVC 3 -->
+          <article class="card work-card" data-category="TVC 广告">
+            <div class="cover gradient landscape">
+              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/TVC%20广告/TVC3.mp4" muted playsinline preload="none"></video>
+            </div>
+            <div class="work-head"><h3>TVC 3</h3></div>
+            <p class="work-desc">品牌 TVC 广告成片（横版）。</p>
+          </article>
+
+          <!-- TVC 4 -->
+          <article class="card work-card" data-category="TVC 广告">
+            <div class="cover gradient landscape">
+              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/TVC%20广告/TVC4.mp4" muted playsinline preload="none"></video>
+            </div>
+            <div class="work-head"><h3>TVC 4</h3></div>
+            <p class="work-desc">品牌 TVC 广告成片（横版）。</p>
           </article>
         </div>
       </div>
 
-      <!-- 4. 平面设计（横竖混合：图片为主） -->
+      <!-- 4. 平面设计（瀑布流：错落有致，无样式边框） -->
       <div class="portfolio-section">
         <h3>平面设计</h3>
-        <div class="portfolio-grid mixed">
-          <article class="card work-card">
-            <div class="cover gradient landscape"></div>
-            <div class="work-head"><h3>海报设计 · 横版</h3></div>
-            <p class="work-desc">用于线下物料或网页横幅的主视觉。</p>
-          </article>
-          <article class="card work-card">
-            <div class="cover gradient portrait"></div>
-            <div class="work-head"><h3>海报设计 · 竖版</h3></div>
-            <p class="work-desc">适配社媒推文与移动端展示。</p>
-          </article>
+        <!-- 简洁瀑布流容器：从 TOS 文件夹的 manifest.json 动态生成，保留一个回退首图 -->
+        <div class="design-masonry" data-source="https://my-website-assets.tos-cn-beijing.volces.com/平面设计/">
+          <img data-src="https://my-website-assets.tos-cn-beijing.volces.com/%E5%B9%B3%E9%9D%A2%E8%AE%BE%E8%AE%A1/%E5%B9%B3%E9%9D%A2%201.jpeg" alt="平面 1" loading="lazy" />
         </div>
       </div>
 
@@ -157,6 +199,13 @@
   
 
   <script src="script.js" defer></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function(){
+        navigator.serviceWorker.register('sw.js').catch(function(err){ console.warn('SW 注册失败:', err); });
+      });
+    }
+  </script>
 <div id="videoModal" class="video-modal" aria-hidden="true">
     <div class="modal-backdrop"></div>
     <div class="modal-dialog">

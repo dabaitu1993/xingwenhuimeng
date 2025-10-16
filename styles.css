@@ -79,6 +79,16 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 .portfolio-grid.masonry{display:block;column-count:3;column-gap:16px}
 .portfolio-grid.masonry .work-card{display:inline-block;width:100%;margin:0 0 16px;break-inside:avoid}
 .portfolio-grid.masonry .work-card.featured .cover{aspect-ratio:21/9}
+/* 设计区（平面设计）：图片不裁剪，容器跟随图片高度 */
+.design.portfolio-grid.masonry .work-card .cover{aspect-ratio:auto}
+.design.portfolio-grid.masonry .work-card .cover img{width:100%;height:auto;object-fit:contain;display:block}
+/* Masonry 响应式列数：移动 1 列，平板 2 列，桌面 3 列 */
+@media (max-width:640px){
+  .portfolio-grid.masonry{column-count:1}
+}
+@media (min-width:641px) and (max-width:1024px){
+  .portfolio-grid.masonry{column-count:2}
+}
 /* 横向行（微电影）：影院式滚动 */
 .portfolio-row{display:grid;gap:16px;grid-template-columns:repeat(3,1fr);padding-bottom:0;overflow:visible}
 .portfolio-row .work-card{width:auto}
@@ -192,10 +202,10 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 @media (max-width:640px){
   .video-modal .modal-close{top:-14px;right:-14px;width:48px;height:48px;font-size:22px}
 }
-/* 封面播放指示 */
-.portfolio-row .work-card .cover{cursor:pointer}
-.portfolio-row .work-card .cover::before{content:"B6";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:32px;opacity:0;transition:opacity .25s ease;pointer-events:none;z-index:2}
-.portfolio-row .work-card:hover .cover::before{opacity:.85}
+/* 封面播放指示（适用于所有作品卡片） */
+.work-card .cover{cursor:pointer}
+.work-card .cover::before{content:"B6";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:32px;opacity:0;transition:opacity .25s ease;pointer-events:none;z-index:2}
+.work-card:hover .cover::before{opacity:.85}
 
 /* 封面播放按钮 */
 .cover .cover-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;cursor:pointer;z-index:3;
@@ -205,3 +215,39 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 /* 封面视频就绪淡入（已存在，确保仍生效） */
 .work-card .cover video{opacity:0;transition:opacity .35s ease}
 .work-card .cover video.ready{opacity:1}
+/* 带货视频：统一卡片尺寸（横竖版封面统一为16:9） */
+.portfolio-grid.goods .work-card .cover{aspect-ratio:16/9}
+.portfolio-grid.goods .work-card .cover.landscape{aspect-ratio:16/9}
+.portfolio-grid.goods .work-card .cover.portrait{aspect-ratio:16/9}
+
+/* 设计轮播（图片画廊） */
+.carousel{position:relative;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:linear-gradient(180deg, rgba(8,20,40,.64), rgba(8,20,40,.45));box-shadow:0 10px 30px rgba(13,70,150,.12)}
+.carousel .carousel-track{display:flex;transition:transform .35s ease;will-change:transform}
+.carousel .slide{flex:0 0 100%}
+.carousel .media{width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;background:#0b1f3a}
+.carousel .media img{width:100%;height:100%;object-fit:cover;display:block}
+.carousel.design{overflow:visible;perspective:1200px;border:none;background:transparent;box-shadow:none}
+.carousel.design .carousel-track{align-items:center;gap:24px;transform-style:preserve-3d;}
+.carousel.design .slide{flex:0 0 clamp(320px, 46vw, 640px);display:grid;place-items:center;transition:transform .45s cubic-bezier(.22,.84,.36,1), opacity .35s ease, filter .35s ease;}
+.carousel.design .media{aspect-ratio:auto;overflow:visible;width:auto;max-width:100%;background:transparent}
+.carousel.design .media img{width:auto;max-width:100%;height:auto;max-height:88vh;object-fit:contain;margin:0 auto}
+.carousel.design .carousel-nav{pointer-events:none}
+.carousel.design .carousel-nav .prev, .carousel.design .carousel-nav .next{pointer-events:auto}
+/* 设计轮播：图像加载前占位，减少跳动 */
+.carousel.design .media{min-height:200px}
+.design-others{display:grid;gap:16px;margin-top:16px;grid-template-columns:repeat(auto-fill, minmax(220px, 1fr))}
+.design-others .design-item{background:transparent;border:none}
+.design-others img{width:100%;height:auto;object-fit:contain;display:block}
+.carousel .carousel-nav{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 8px;pointer-events:none}
+.carousel .carousel-nav .prev, .carousel .carousel-nav .next{pointer-events:auto;width:40px;height:40px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#2f7dff,#62c8ff);color:#fff;font-weight:700;box-shadow:0 10px 30px rgba(47,125,255,.35);cursor:pointer;opacity:.92}
+.carousel .carousel-nav .prev:hover, .carousel .carousel-nav .next:hover{transform:scale(1.06)}
+.carousel .carousel-nav .prev:active, .carousel .carousel-nav .next:active{transform:scale(0.98)}
+.carousel .carousel-nav .prev{margin-right:auto}
+.carousel .carousel-nav .next{margin-left:auto}
+
+/* 设计瀑布流：极简，无边框与背景，仅列布局 */
+.design-masonry{columns:4 280px;column-gap:16px}
+.design-masonry img{width:100%;height:auto;display:block;break-inside:avoid;margin-bottom:16px}
+@media (max-width:1200px){.design-masonry{columns:3 260px}}
+@media (max-width:900px){.design-masonry{columns:2 240px}}
+@media (max-width:640px){.design-masonry{columns:1 100%}}
