@@ -259,7 +259,7 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 }
 /* 封面播放指示（适用于所有作品卡片） */
 .work-card .cover{cursor:pointer}
-.work-card .cover::before{content:"B6";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:32px;opacity:0;transition:opacity .25s ease;pointer-events:none;z-index:2}
+.work-card .cover::before{content:"▶";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:32px;opacity:0;transition:opacity .25s ease;pointer-events:none;z-index:2}
 .work-card:hover .cover::before{opacity:.85}
 
 /* 封面播放按钮 */
