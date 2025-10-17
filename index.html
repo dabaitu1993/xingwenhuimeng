@@ -242,11 +242,16 @@
 
   
 
-  <script src="script.js" defer></script>
+  <script src="script.js?v=0.1.1" defer></script>
   <script>
     if ('serviceWorker' in navigator) {
+      // 当新的 SW 接管控制时，自动刷新一次，确保资源更新生效
+      let reloaded = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function(){
+        if (reloaded) return; reloaded = true; window.location.reload();
+      });
       window.addEventListener('load', function(){
-        navigator.serviceWorker.register('sw.js').catch(function(err){ console.warn('SW 注册失败:', err); });
+        navigator.serviceWorker.register('sw.js?v=0.1.1').catch(function(err){ console.warn('SW 注册失败:', err); });
       });
     }
   </script>
