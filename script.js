@@ -94,6 +94,21 @@
       entries.forEach(e=>{ if(e.isIntersecting){ setActive(e.target.id); } });
     },{ rootMargin: '-40% 0px -40% 0px', threshold: 0.01 });
     sections.forEach(sec=> spy.observe(sec));
+
+    // 侧边导航出现时机：划过 Banner 后再显示
+    const heroSection = document.querySelector('.hero');
+    const siteHeader = document.querySelector('.site-header');
+    const updateSideNavVisibility = ()=>{
+      if(!heroSection){ return; }
+      const headerH = (siteHeader && siteHeader.offsetHeight) ? siteHeader.offsetHeight : 64;
+      const heroBottom = heroSection.offsetTop + heroSection.offsetHeight - headerH;
+      const y = window.scrollY || document.documentElement.scrollTop || 0;
+      const shouldShow = y >= heroBottom;
+      sideNav.classList.toggle('visible', shouldShow);
+    };
+    window.addEventListener('scroll', updateSideNavVisibility, { passive: true });
+    window.addEventListener('resize', updateSideNavVisibility);
+    updateSideNavVisibility();
   }
 
   // 英雄图轻视差（若存在）

@@ -39,7 +39,8 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 }
 
 /* 贴边纵向导航 */
-.side-nav{display:none;position:fixed;top:88px;left:calc((100vw - 1100px)/2 + 1100px + 20px);z-index:40;pointer-events:none}
+.side-nav{display:none;position:fixed;top:88px;left:calc((100vw - 1100px)/2 + 1100px + 20px);z-index:40;pointer-events:none;opacity:0;transform:translateY(-6px);transition:opacity .25s ease, transform .25s ease}
+.side-nav.visible{opacity:1;transform:translateY(0)}
 .side-nav ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
 .side-nav a{display:block;padding:8px 12px;border-radius:999px;font-weight:600;text-decoration:none;color:#eaf3ff;background:rgba(255,255,255,.06);border:1px solid rgba(120,180,255,.30);backdrop-filter:blur(6px);pointer-events:auto}
 .side-nav a:hover{color:#fff;border-color:transparent;background:linear-gradient(135deg,#2f7dff,#62c8ff)}
