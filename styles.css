@@ -13,7 +13,7 @@ html,body{margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'Inter','PingFang SC','Hiragino Sans GB',-apple-system,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg);} 
 /* 暗色主题微光纹理 */
-body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-index:-1;background:radial-gradient(1200px 400px at 20% 0%, rgba(98,200,255,.16), rgba(10,23,48,0)), radial-gradient(1200px 400px at 80% -10%, rgba(47,125,255,.14), rgba(10,23,48,0));filter:blur(20px);animation:ambientShift 24s ease-in-out infinite alternate;will-change:transform,filter;} 
+body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-index:-1;background:radial-gradient(1200px 400px at 20% 0%, rgba(98,200,255,.16), rgba(10,23,48,0)), radial-gradient(1200px 400px at 80% -10%, rgba(47,125,255,.14), rgba(10,23,48,0));filter:blur(20px);} 
 
 @keyframes ambientShift{
   0%{ transform:translate3d(0,0,0) scale(1); filter:hue-rotate(0deg) blur(20px); }
@@ -334,3 +334,24 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 .image-modal .image-nav .prev:active,.image-modal .image-nav .next:active{transform:scale(0.98)}
 .image-modal .image-nav .prev{margin-right:auto}
 .image-modal .image-nav .next{margin-left:auto}
+
+/* 禁用 Banner 伪元素背景，避免顶区动效 */
+.hero::before{display:none !important}
+
+/* Banner 下方动态背景（仅 Banner 下方显示） */
+body::after{
+  content:"";position:fixed;left:-10%;right:-10%;top:68vh;bottom:-10%;z-index:-1;
+  background:
+    radial-gradient(1100px 450px at 20% 80%, rgba(98,200,255,.12), rgba(10,23,48,0) 70%),
+    radial-gradient(1100px 450px at 80% 85%, rgba(47,125,255,.12), rgba(10,23,48,0) 70%);
+  mix-blend-mode:screen;filter:blur(22px);opacity:.45;
+  animation:ambientBelow 28s ease-in-out infinite alternate;
+  will-change:transform,filter,opacity;pointer-events:none;
+}
+@keyframes ambientBelow{
+  0%{transform:translate3d(0,0,0) scale(1);filter:hue-rotate(0deg) blur(22px);opacity:.40}
+  50%{transform:translate3d(0,-1.5vh,0) scale(1.02);filter:hue-rotate(10deg) blur(20px);opacity:.46}
+  100%{transform:translate3d(0,-3vh,0) scale(1.03);filter:hue-rotate(18deg) blur(18px);opacity:.50}
+}
+@media (max-width:640px){body::after{top:56vh}}
+@media (prefers-reduced-motion: reduce){body::after{animation:none}}
