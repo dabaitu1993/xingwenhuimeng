@@ -10,6 +10,7 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
+html{scroll-behavior:smooth}
 body{font-family:'Inter','PingFang SC','Hiragino Sans GB',-apple-system,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg);} 
 /* 暗色主题微光纹理 */
 body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-index:-1;background:radial-gradient(1200px 400px at 20% 0%, rgba(98,200,255,.16), rgba(10,23,48,0)), radial-gradient(1200px 400px at 80% -10%, rgba(47,125,255,.14), rgba(10,23,48,0));filter:blur(20px);} 
@@ -22,8 +23,29 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 .logo{display:flex;align-items:center;gap:10px;font-weight:700}
 .logo-mark{display:inline-flex;width:28px;height:28px;border-radius:50%;align-items:center;justify-content:center;background:linear-gradient(135deg,#4EA3FF 0%,#6BD3FF 100%);color:#fff}
 .logo-text{letter-spacing:0.5px}
+.logo .logo-r{font-size:.6em;vertical-align:super;margin-left:4px;color:#aee0ff}
 .nav a{color:var(--text);text-decoration:none;margin-left:20px;font-weight:600}
 .nav a:hover{color:var(--primary)}
+
+/* 顶部导航移动端适配 */
+.nav-toggle{display:none}
+@media (max-width:640px){
+  .header-inner{flex-wrap:wrap;height:auto}
+  .nav{display:none;width:100%}
+  .site-header.nav-open .nav{display:grid;grid-template-columns:1fr;row-gap:8px;margin-top:8px}
+  .nav a{margin:0;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,.06)}
+  .nav a:hover{background:linear-gradient(135deg,#2f7dff,#62c8ff);color:#fff;border-color:transparent}
+  .nav-toggle{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(120,180,255,.3);background:rgba(255,255,255,.06);color:#eaf3ff;border-radius:10px;padding:8px 12px;font-weight:700}
+}
+
+/* 贴边纵向导航 */
+.side-nav{display:none;position:fixed;top:88px;left:calc((100vw - 1100px)/2 + 1100px + 20px);z-index:40;pointer-events:none}
+.side-nav ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.side-nav a{display:block;padding:8px 12px;border-radius:999px;font-weight:600;text-decoration:none;color:#eaf3ff;background:rgba(255,255,255,.06);border:1px solid rgba(120,180,255,.30);backdrop-filter:blur(6px);pointer-events:auto}
+.side-nav a:hover{color:#fff;border-color:transparent;background:linear-gradient(135deg,#2f7dff,#62c8ff)}
+.side-nav a.active{color:#fff;border-color:transparent;background:linear-gradient(135deg,#4EA3FF,#6BD3FF)}
+@media (max-width:640px){.side-nav{display:none}}
+@media (min-width:1440px) and (min-height:700px){.side-nav{display:block}}
 
 /* Hero */
 .hero{position:relative;padding:100px 0;min-height:68vh;background:
@@ -68,13 +90,14 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 .portfolio{padding:40px 0}
 .portfolio .section-sub{line-height:1.7;max-width:900px;margin-left:auto;margin-right:auto}
 .portfolio-section{margin:26px 0 12px}
+.hero, .portfolio, .portfolio-section{scroll-margin-top:72px}
 .portfolio-section h3{margin:0 0 12px;color:#eaf3ff;font-size:20px;letter-spacing:.2px}
 .portfolio-toolbar{display:flex;gap:8px;margin:10px 0 18px}
 .portfolio-toolbar .tab{border:1px solid rgba(120,180,255,.3);background:rgba(255,255,255,.06);color:var(--text);padding:8px 12px;border-radius:999px;font-weight:600;cursor:pointer}
 .portfolio-toolbar .tab.active{background:linear-gradient(135deg,#2f7dff,#62c8ff);color:#fff;border-color:transparent}
 .portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;grid-auto-flow:dense}
 /* 混合比例网格：适配横竖版 */
-.portfolio-grid.mixed{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.portfolio-grid.mixed{grid-template-columns:repeat(3,1fr)}
 /* Masonry（瀑布流）布局：更生动的视觉节奏 */
 .portfolio-grid.masonry{display:block;column-count:3;column-gap:16px}
 .portfolio-grid.masonry .work-card{display:inline-block;width:100%;margin:0 0 16px;break-inside:avoid}
@@ -245,9 +268,37 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 .carousel .carousel-nav .prev{margin-right:auto}
 .carousel .carousel-nav .next{margin-left:auto}
 
-/* 设计瀑布流：极简，无边框与背景，仅列布局 */
+/* 回到顶部按钮 */
+.back-top{position:fixed;bottom:20px;right:20px;width:44px;height:44px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#2f7dff,#62c8ff);color:#fff;font-size:20px;font-weight:700;cursor:pointer;z-index:60;opacity:0;transform:translateY(8px);transition:opacity .25s ease, transform .25s ease;box-shadow:0 10px 30px rgba(47,125,255,.35)}
+.back-top.show{opacity:.95;transform:translateY(0)}
+.back-top:focus{outline:2px solid #fff3}
+@media (max-width:640px){.back-top{width:48px;height:48px}}
+
+/* 设计瀑布流：极简，仅列布局；滚动由外框控制 */
 .design-masonry{columns:4 280px;column-gap:16px}
 .design-masonry img{width:100%;height:auto;display:block;break-inside:avoid;margin-bottom:16px}
 @media (max-width:1200px){.design-masonry{columns:3 260px}}
 @media (max-width:900px){.design-masonry{columns:2 240px}}
 @media (max-width:640px){.design-masonry{columns:1 100%}}
+
+/* 设计外框：可见边框与背景，纵向滚动，参考其他板块风格 */
+.design-frame{max-height:90.67vh;overflow-y:auto;padding:12px;border:1px solid var(--border);border-radius:12px;background:linear-gradient(135deg,#0f2342,#112a4f);box-shadow:0 12px 40px rgba(13,70,150,.25);margin-top:8px}
+.design-frame::-webkit-scrollbar{width:10px}
+.design-frame::-webkit-scrollbar-thumb{background:#2f7dff55;border-radius:999px}
+.design-frame::-webkit-scrollbar-track{background:transparent}
+
+/* 图片弹窗（Lightbox）：与视频弹窗风格一致，支持前后切换 */
+.image-modal{position:fixed;inset:0;display:none;z-index:1000}
+.image-modal.open{display:block}
+.image-modal .modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px)}
+.image-modal .modal-dialog{position:relative;z-index:1001;width:auto;max-width:92vw;max-height:88vh;margin:6vh auto;background:linear-gradient(135deg,#0f2342,#112a4f);border:1px solid var(--border);border-radius:12px;padding:12px;box-shadow:0 20px 60px rgba(13,70,150,.35);display:flex;align-items:center;justify-content:center;overflow:visible}
+.image-modal img{width:auto;height:auto;max-width:92vw;max-height:calc(88vh - 24px);object-fit:contain;border-radius:8px;display:block;background:#0b1b34}
+.image-modal .modal-close{position:absolute;top:-12px;right:-12px;width:44px;height:44px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#2f7dff,#62c8ff);color:#fff;font-size:20px;font-weight:700;cursor:pointer;z-index:2000;box-shadow:0 10px 30px rgba(47,125,255,.35);pointer-events:auto;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.image-modal .modal-close:hover{transform:scale(1.06)}
+.image-modal .modal-close:active{transform:scale(0.98)}
+.image-modal .image-nav{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 8px;pointer-events:none}
+.image-modal .image-nav .prev,.image-modal .image-nav .next{pointer-events:auto;width:40px;height:40px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#2f7dff,#62c8ff);color:#fff;font-weight:700;box-shadow:0 10px 30px rgba(47,125,255,.35);cursor:pointer}
+.image-modal .image-nav .prev:hover,.image-modal .image-nav .next:hover{transform:scale(1.06)}
+.image-modal .image-nav .prev:active,.image-modal .image-nav .next:active{transform:scale(0.98)}
+.image-modal .image-nav .prev{margin-right:auto}
+.image-modal .image-nav .next{margin-left:auto}

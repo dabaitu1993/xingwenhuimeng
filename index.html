@@ -11,8 +11,36 @@
   <link rel="stylesheet" href="styles.css?v=design-full-1" />
 </head>
 <body>
+  <!-- 顶部导航条 -->
+  <header class="site-header">
+    <div class="header-inner container">
+      <div class="logo">
+        <span class="logo-text">星文绘梦<span class="logo-r" aria-label="注册商标">®</span></span>
+      </div>
+      <nav class="nav" id="site-nav">
+        <a href="#home">首页</a>
+        <a href="#portfolio">作品集</a>
+        <a href="#microfilm">微电影</a>
+        <a href="#goods">带货视频</a>
+        <a href="#tvc">TVC 广告</a>
+        <a href="#design">平面设计</a>
+        <a href="#selfmedia">自媒体素材</a>
+      </nav>
+      <button class="nav-toggle" aria-label="展开菜单" aria-controls="site-nav" aria-expanded="false">☰</button>
+    </div>
+  </header>
+  <nav class="side-nav" aria-label="页面纵向导航">
+    <ul>
+      <li><a href="#home" class="active">首页</a></li>
+      <li><a href="#microfilm">微电影</a></li>
+      <li><a href="#goods">带货视频</a></li>
+      <li><a href="#tvc">TVC 广告</a></li>
+      <li><a href="#design">平面设计</a></li>
+      <li><a href="#selfmedia">自媒体素材</a></li>
+    </ul>
+  </nav>
   <!-- 英雄区（大Banner与大标题） -->
-  <section class="hero">
+  <section class="hero" id="home">
     <div class="container hero-inner">
       <div class="hero-copy">
         <h1 class="hero-title">星文绘梦</h1>
@@ -29,13 +57,13 @@
       <p class="section-sub">当文字创意撞上 AIGC 技术，每一个作品都是 “视觉革命” 现场！这里的文生图、图生视频，既能用 “超低成本” 打造 “电影级质感”，又能让小说剧情、品牌故事瞬间 “活” 成震撼画面。点击卡片，解锁创意如何被 AIGC 变成 “眼前一亮” 的成片。</p>
 
       <!-- 1. 微电影（横版视频为主：影院式横向行） -->
-      <div class="portfolio-section">
+      <div class="portfolio-section" id="microfilm">
         <h3>微电影</h3>
         <div class="portfolio-row">
           <!-- Seedance 4.0 官方宣传片（字节） -->
           <article class="card work-card featured" data-category="微电影">
             <div class="cover gradient landscape">
-              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/字节新一代图片Seedance4.0官方宣传片.mp4" muted playsinline loop preload="none"></video>
+              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/微电影/字节新一代图片Seedance4.0官方宣传片.mp4" muted playsinline loop preload="none"></video>
             </div>
             <div class="work-head"><h3>字节Seedance4.0官方宣传片</h3></div>
             <p class="work-desc">AIGC 技术亮点直观呈现，电影级镜头语言与声画融合。</p>
@@ -55,7 +83,7 @@
           <!-- 仙侠类小说经典片段改编 -->
           <article class="card work-card" data-category="微电影">
             <div class="cover gradient landscape">
-              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/仙侠类小说经典片段改编.mp4" muted playsinline loop preload="none"></video>
+              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/微电影/仙侠类小说经典片段改编.mp4" muted playsinline loop preload="none"></video>
             </div>
             <div class="work-head"><h3>仙侠类小说经典片段改编</h3></div>
             <p class="work-desc">以小说情节为骨架，微电影化叙事与镜头语言。</p>
@@ -65,7 +93,7 @@
           <!-- 都市超能力类小说 -->
           <article class="card work-card" data-category="微电影">
             <div class="cover gradient landscape">
-              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/都市超能力类小说.mp4" muted playsinline loop preload="none"></video>
+              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/微电影/都市超能力类小说.mp4" muted playsinline loop preload="none"></video>
             </div>
             <div class="work-head"><h3>都市超能力类小说</h3></div>
             <p class="work-desc">以都市幻想为基底，强调动态特效与剧情张力。</p>
@@ -75,7 +103,7 @@
           <!-- 儿童系列动画 -->
           <article class="card work-card" data-category="微电影">
             <div class="cover gradient landscape">
-              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/儿童系列动画.mp4" muted playsinline loop preload="none"></video>
+              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/微电影/儿童系列动画.mp4" muted playsinline loop preload="none"></video>
             </div>
             <div class="work-head"><h3>儿童系列动画</h3></div>
             <p class="work-desc">面向少儿内容的风格化画面与节奏控制。</p>
@@ -85,9 +113,9 @@
       </div>
 
       <!-- 2. 带货视频（横竖混合：自适应网格） -->
-      <div class="portfolio-section">
+      <div class="portfolio-section" id="goods">
         <h3>带货视频</h3>
-        <div class="portfolio-grid mixed goods" data-source="https://my-website-assets.tos-cn-beijing.volces.com/带货视频/">
+        <div class="portfolio-grid mixed goods">
           <!-- 中东素人风（常见竖版） -->
           <article class="card work-card" data-category="带货视频">
             <div class="cover gradient portrait">
@@ -127,9 +155,9 @@
       </div>
 
       <!-- 3. TVC 广告（横竖混合：自适应网格） -->
-      <div class="portfolio-section">
+      <div class="portfolio-section" id="tvc">
         <h3>TVC 广告</h3>
-        <div class="portfolio-grid mixed tvc" data-source="https://my-website-assets.tos-cn-beijing.volces.com/TVC 广告/">
+        <div class="portfolio-grid mixed tvc">
           <!-- TVC 1 -->
           <article class="card work-card" data-category="TVC 广告">
             <div class="cover gradient landscape">
@@ -169,27 +197,43 @@
       </div>
 
       <!-- 4. 平面设计（瀑布流：错落有致，无样式边框） -->
-      <div class="portfolio-section">
+      <div class="portfolio-section" id="design">
         <h3>平面设计</h3>
-        <!-- 简洁瀑布流容器：从 TOS 文件夹的 manifest.json 动态生成，保留一个回退首图 -->
-        <div class="design-masonry" data-source="https://my-website-assets.tos-cn-beijing.volces.com/平面设计/">
-          <img data-src="https://my-website-assets.tos-cn-beijing.volces.com/%E5%B9%B3%E9%9D%A2%E8%AE%BE%E8%AE%A1/%E5%B9%B3%E9%9D%A2%201.jpeg" alt="平面 1" loading="lazy" />
+        <!-- 设计外框：纵向滚动的可见容器，内部为瀑布流 -->
+        <div class="design-frame">
+          <div class="design-masonry" data-source="https://my-website-assets.tos-cn-beijing.volces.com/平面设计/">
+            <img data-src="https://my-website-assets.tos-cn-beijing.volces.com/%E5%B9%B3%E9%9D%A2%E8%AE%BE%E8%AE%A1/%E5%B9%B3%E9%9D%A2%201.jpeg" alt="平面 1" loading="lazy" />
+          </div>
         </div>
       </div>
 
       <!-- 5. 自媒体素材（横竖混合：视频为主） -->
-      <div class="portfolio-section">
+      <div class="portfolio-section" id="selfmedia">
         <h3>自媒体素材</h3>
         <div class="portfolio-grid mixed">
-          <article class="card work-card">
-            <div class="cover gradient portrait"></div>
-            <div class="work-head"><h3>账号运营 · 竖版</h3></div>
-            <p class="work-desc">竖屏适配抖音快手等短视频平台。</p>
+          <!-- 自媒体 1 -->
+          <article class="card work-card" data-category="自媒体素材">
+            <div class="cover gradient landscape">
+              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/自媒体素材/自媒体%201.mp4" muted playsinline preload="none"></video>
+            </div>
+            <div class="work-head"><h3>自媒体 1</h3></div>
+            <p class="work-desc">短视频样片（自媒体）。</p>
           </article>
-          <article class="card work-card">
-            <div class="cover gradient landscape"></div>
-            <div class="work-head"><h3>频道视频 · 横版</h3></div>
-            <p class="work-desc">用于 B 站/视频号的内容合集。</p>
+          <!-- 自媒体 2 -->
+          <article class="card work-card" data-category="自媒体素材">
+            <div class="cover gradient landscape">
+              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/自媒体素材/自媒体%202.mp4" muted playsinline preload="none"></video>
+            </div>
+            <div class="work-head"><h3>自媒体 2</h3></div>
+            <p class="work-desc">短视频样片（自媒体）。</p>
+          </article>
+          <!-- 自媒体 3 -->
+          <article class="card work-card" data-category="自媒体素材">
+            <div class="cover gradient landscape">
+              <video data-src="https://my-website-assets.tos-cn-beijing.volces.com/自媒体素材/自媒体%203.mp4" muted playsinline preload="none"></video>
+            </div>
+            <div class="work-head"><h3>自媒体 3</h3></div>
+            <p class="work-desc">短视频样片（自媒体）。</p>
           </article>
         </div>
       </div>
@@ -213,6 +257,22 @@
       <video id="modalVideo" controls preload="metadata" playsinline controlslist="nodownload" disablepictureinpicture></video>
     </div>
   </div>
+
+  <!-- 图片弹窗（Lightbox）：支持上一张/下一张与关闭 -->
+  <div id="imageModal" class="image-modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog">
+      <button class="modal-close" aria-label="关闭">×</button>
+      <img id="modalImage" alt="图片预览" />
+      <div class="image-nav">
+        <button class="prev" aria-label="上一张">‹</button>
+        <button class="next" aria-label="下一张">›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 回到顶部按钮（右下角） -->
+  <button class="back-top" aria-label="回到顶部" title="回到顶部">↑</button>
 
 </body>
 </html>

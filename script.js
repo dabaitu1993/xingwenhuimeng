@@ -55,6 +55,47 @@
   },{threshold:.15});
   cards.forEach(c=>io.observe(c));
 
+  // 顶部导航：移动端菜单展开/收起
+  const siteHeaderEl = document.querySelector('.site-header');
+  const navToggle = siteHeaderEl ? siteHeaderEl.querySelector('.nav-toggle') : null;
+  const siteNavEl = siteHeaderEl ? siteHeaderEl.querySelector('#site-nav') : null;
+  if(navToggle && siteHeaderEl){
+    navToggle.addEventListener('click', ()=>{
+      const open = siteHeaderEl.classList.toggle('nav-open');
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    // 链接点击后收起菜单，避免遮挡内容与锚点定位偏差
+    if(siteNavEl){
+      siteNavEl.querySelectorAll('a[href^="#"]').forEach(a=>{
+        a.addEventListener('click', ()=>{
+          siteHeaderEl.classList.remove('nav-open');
+          navToggle.setAttribute('aria-expanded','false');
+        });
+      });
+    }
+    // 视口尺寸变化时复位
+    window.addEventListener('resize', ()=>{
+      if(window.innerWidth > 640){
+        siteHeaderEl.classList.remove('nav-open');
+        navToggle.setAttribute('aria-expanded','false');
+      }
+    });
+  }
+
+  // 侧边导航滚动高亮（Scrollspy）
+  const sideNav = document.querySelector('.side-nav');
+  if(sideNav){
+    const links = Array.from(sideNav.querySelectorAll('a[href^="#"]'));
+    const sections = links.map(a=> document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    const setActive = (id)=>{
+      links.forEach(a=> a.classList.toggle('active', a.getAttribute('href') === `#${id}`));
+    };
+    const spy = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ setActive(e.target.id); } });
+    },{ rootMargin: '-40% 0px -40% 0px', threshold: 0.01 });
+    sections.forEach(sec=> spy.observe(sec));
+  }
+
   // 英雄图轻视差（若存在）
   const heroImg = document.querySelector('.hero-art img');
   if(heroImg){
@@ -63,11 +104,53 @@
     });
   }
 
+  // 回到顶部按钮：滚动显隐与平滑滚动
+  const backTopBtn = document.querySelector('.back-top');
+  if(backTopBtn){
+    const toggleBackTop = ()=>{
+      const y = window.scrollY; backTopBtn.classList.toggle('show', y > 400);
+    };
+    window.addEventListener('scroll', toggleBackTop);
+    toggleBackTop();
+    backTopBtn.addEventListener('click', ()=>{ window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  }
+
   // 弹窗播放器
   const modal = document.getElementById('videoModal');
   const modalVideo = document.getElementById('modalVideo');
   const modalClose = modal ? modal.querySelector('.modal-close') : null;
   const modalBackdrop = modal ? modal.querySelector('.modal-backdrop') : null;
+  // 图片弹窗（Lightbox）
+  const imageModal = document.getElementById('imageModal');
+  const modalImage = imageModal ? document.getElementById('modalImage') : null;
+  const imageClose = imageModal ? imageModal.querySelector('.modal-close') : null;
+  const imageBackdrop = imageModal ? imageModal.querySelector('.modal-backdrop') : null;
+  const imagePrev = imageModal ? imageModal.querySelector('.prev') : null;
+  const imageNext = imageModal ? imageModal.querySelector('.next') : null;
+  let lightboxImages = []; let lightboxIndex = 0;
+  function openImageLightbox(list, index){
+    if(!imageModal||!modalImage) return;
+    lightboxImages = list || [];
+    lightboxIndex = Math.max(0, Math.min(index||0, lightboxImages.length-1));
+    const cur = lightboxImages[lightboxIndex]; if(!cur) return;
+    modalImage.src = cur.url; modalImage.alt = cur.title||'';
+    imageModal.classList.add('open'); imageModal.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeImageLightbox(){ if(!imageModal||!modalImage) return; imageModal.classList.remove('open'); imageModal.setAttribute('aria-hidden','true'); modalImage.removeAttribute('src'); document.body.style.overflow = ''; }
+  function shiftImage(delta){ if(!lightboxImages.length) return; lightboxIndex = (lightboxIndex + delta + lightboxImages.length) % lightboxImages.length; const cur = lightboxImages[lightboxIndex]; if(cur){ modalImage.src = cur.url; modalImage.alt = cur.title||''; } }
+  if(imageClose) imageClose.addEventListener('click', closeImageLightbox);
+  if(imageBackdrop) imageBackdrop.addEventListener('click', closeImageLightbox);
+  if(imagePrev) imagePrev.addEventListener('click', ()=> shiftImage(-1));
+  if(imageNext) imageNext.addEventListener('click', ()=> shiftImage(1));
+  window.addEventListener('keydown', (e)=>{
+    // 仅在图片弹窗开启时响应键盘
+    const imgOpen = imageModal && imageModal.classList.contains('open');
+    if(!imgOpen) return;
+    if(e.key==='Escape') closeImageLightbox();
+    else if(e.key==='ArrowLeft') shiftImage(-1);
+    else if(e.key==='ArrowRight') shiftImage(1);
+  });
   function openVideo(url){
     if(!modal||!modalVideo) return;
     modal.classList.add('open');
@@ -243,7 +326,7 @@
       entries.forEach(e=>{
         if(e.isIntersecting){ const img = e.target; if(!img.src && img.dataset.src){ img.src = img.dataset.src; } io.unobserve(img); }
       });
-    },{rootMargin:'200px 0px', threshold:0.01});
+    },{root: container.closest('.design-frame')||null, rootMargin:'200px 0px', threshold:0.01});
     imgs.forEach(img=> io.observe(img));
   }
 
@@ -261,23 +344,41 @@
       if(res.ok){ const data = await res.json(); items = Array.isArray(data.items) ? data.items : []; }
       if(items.length === 0){ items = Array.from({length:13}, (_,i)=>({ file: `平面 ${i+1}.jpeg`, title: `平面 ${i+1}` })); }
       container.innerHTML = '';
-      items.forEach(item=>{
+      const gallery = items.map(item=>{
         const file = item.file || ''; const title = item.title || file.replace(/\.[^/.]+$/,'');
         const url = buildUrl(base, file);
-        const img = document.createElement('img'); img.loading = 'lazy'; img.alt = title; img.dataset.src = url;
+        return { url, title };
+      });
+      gallery.forEach((meta, i)=>{
+        const img = document.createElement('img'); img.loading = 'lazy'; img.alt = meta.title; img.dataset.src = meta.url; img.dataset.index = String(i);
         container.appendChild(img);
       });
       initDesignLazy(container);
+      // 点击图片打开弹窗并支持前后切换
+      container.addEventListener('click', (e)=>{
+        const target = e.target; if(!(target instanceof Element)) return;
+        if(target.tagName.toLowerCase()==='img'){
+          const i = parseInt(target.dataset.index||'0', 10) || 0;
+          openImageLightbox(gallery, i);
+        }
+      });
     }catch(err){
       // 瀑布流回退：直接生成若干图片
       const items = Array.from({length:13}, (_,i)=>({ file: `平面 ${i+1}.jpeg`, title: `平面 ${i+1}` }));
       container.innerHTML = '';
-      items.forEach(item=>{
-        const url = buildUrl(base, item.file);
-        const img = document.createElement('img'); img.loading = 'lazy'; img.alt = item.title; img.dataset.src = url;
+      const gallery = items.map(item=>({ url: buildUrl(base, item.file), title: item.title }));
+      gallery.forEach((meta, i)=>{
+        const img = document.createElement('img'); img.loading = 'lazy'; img.alt = meta.title; img.dataset.src = meta.url; img.dataset.index = String(i);
         container.appendChild(img);
       });
       initDesignLazy(container);
+      container.addEventListener('click', (e)=>{
+        const target = e.target; if(!(target instanceof Element)) return;
+        if(target.tagName.toLowerCase()==='img'){
+          const i = parseInt(target.dataset.index||'0', 10) || 0;
+          openImageLightbox(gallery, i);
+        }
+      });
       console.warn('设计瀑布流动态加载失败，已使用回退:', err);
     }
   }
