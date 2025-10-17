@@ -13,7 +13,17 @@ html,body{margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'Inter','PingFang SC','Hiragino Sans GB',-apple-system,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg);} 
 /* 暗色主题微光纹理 */
-body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-index:-1;background:radial-gradient(1200px 400px at 20% 0%, rgba(98,200,255,.16), rgba(10,23,48,0)), radial-gradient(1200px 400px at 80% -10%, rgba(47,125,255,.14), rgba(10,23,48,0));filter:blur(20px);} 
+body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-index:-1;background:radial-gradient(1200px 400px at 20% 0%, rgba(98,200,255,.16), rgba(10,23,48,0)), radial-gradient(1200px 400px at 80% -10%, rgba(47,125,255,.14), rgba(10,23,48,0));filter:blur(20px);animation:ambientShift 24s ease-in-out infinite alternate;will-change:transform,filter;} 
+
+@keyframes ambientShift{
+  0%{ transform:translate3d(0,0,0) scale(1); filter:hue-rotate(0deg) blur(20px); }
+  50%{ transform:translate3d(0,-8px,0) scale(1.02); filter:hue-rotate(4deg) blur(22px); }
+  100%{ transform:translate3d(0,-12px,0) scale(1.03); filter:hue-rotate(6deg) blur(24px); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  body::before{ animation:none; }
+}
 
 .container{max-width:1100px;margin:0 auto;padding:0 20px}
 
