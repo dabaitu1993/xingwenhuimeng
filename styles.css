@@ -59,7 +59,7 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 @media (min-width:1440px) and (min-height:700px){.side-nav{display:block}}
 
 /* Hero */
-.hero{position:relative;padding:100px 0;min-height:68vh;background:
+.hero{position:relative;padding:72px 0 40px;min-height:36vh;background:
   linear-gradient(180deg, rgba(10,36,74,.15) 0%, rgba(255,255,255,0) 40%),
   linear-gradient(0deg, rgba(10,36,74,.25), rgba(10,36,74,.25)),
   url('assets/images/banner.jpg') center/cover no-repeat;
@@ -85,10 +85,10 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 @media (prefers-reduced-motion: reduce){
   .hero::before{animation:none}
 }
-.hero-inner{display:grid;grid-template-columns:1fr;gap:30px;align-items:center;justify-items:center}
-.hero-copy{color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.25);text-align:center;max-width:900px}
-.hero-title{margin:0 0 28px 0;font-size:96px;line-height:1;letter-spacing:4px;font-weight:800;color:#fff}
-.tagline{font-size:24px;color:rgba(255,255,255,.95);margin:0 0 8px}
+.hero-inner{display:grid;grid-template-columns:1fr;gap:24px;align-items:center;justify-items:center}
+.hero-copy{color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.25);text-align:center;max-width:840px}
+.hero-title{margin:0 0 20px 0;font-size:76px;line-height:1.02;letter-spacing:3px;font-weight:800;color:#fff}
+.tagline{font-size:20px;color:rgba(255,255,255,.95);margin:0 0 8px}
 .hero-copy .sub{color:rgba(255,255,255,.85);margin:0}
 .cta{display:flex;gap:12px}
 .btn{display:inline-block;border-radius:10px;padding:10px 16px;font-weight:700;text-decoration:none}
@@ -194,8 +194,9 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 /* 科技质感：玻璃态 + 渐变细边 + 内阴影与亮色文字 */
 .portfolio .work-card{position:relative;background:linear-gradient(180deg, rgba(8,20,40,.72), rgba(8,20,40,.55));backdrop-filter:saturate(140%) blur(8px);border:1px solid rgba(120,180,255,.18);box-shadow:inset 0 1px 10px rgba(255,255,255,.04), 0 16px 40px rgba(13,70,150,.12)}
 .portfolio .work-card::before{content:"";position:absolute;inset:0;border-radius:16px;padding:1px;background:linear-gradient(135deg, rgba(78,163,255,.45), rgba(107,211,255,.45));-webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.work-card .work-head h3{font-size:16px;margin:0 0 2px}
 .portfolio .work-card .work-head h3{color:#eaf3ff}
-.portfolio .work-card .work-desc{color:rgba(204,224,255,.8)}
+.portfolio .work-card .work-desc{color:rgba(204,224,255,.8);margin-top:2px;margin-bottom:0}
 .portfolio .badge{background:rgba(46,125,255,.18);color:#aee0ff;border:1px solid rgba(98,200,255,.35)}
 .portfolio .work-actions .btn.small{background:rgba(255,255,255,.06);color:#eaf3ff;border:1px solid rgba(120,180,255,.3)}
 
@@ -209,6 +210,51 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 /* CTA */
 .cta-section{padding:60px 0;background:linear-gradient(180deg,#091a34 0%, #0b1f3a 100%);text-align:center}
 .cta-inner h2{margin:0 0 8px}
+/* 新增首页板块样式：星耀品牌 / 绘梦AI研习社 */
+/* 模块化外框：让两块内容显得更独立与精致 */
+.module{border:1px solid var(--border);border-radius:16px;box-shadow:0 12px 32px rgba(13,70,150,.18);background:linear-gradient(135deg,#0f2342,#112a4f);overflow:hidden}
+.module + .module{margin-top:18px}
+.module-header{position:relative;padding:18px 18px;border-bottom:1px solid rgba(140,200,255,.14);display:flex;flex-direction:column;align-items:center;gap:2px}
+.module-header::before{content:"";position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:64px;height:3px;border-radius:999px;background:linear-gradient(135deg,#4EA3FF,#9FF0FF);opacity:.75}
+.module-brand .module-header::before{background:linear-gradient(135deg,#FFD76D,#FFB347)}
+.module-ai .module-header::before{background:linear-gradient(135deg,#A56DFF,#6BD3FF)}
+.module-body{padding:20px 18px}
+.module-body .section-sub{margin:0 0 8px;line-height:1.75}
+/* 右上角链接（赛道详情） */
+.module-link{position:absolute;right:16px;top:16px;color:#aee0ff;text-decoration:none;font-weight:600}
+.module-link:hover{color:#fff}
+/* 两列图文布局 */
+ .content-cta-row{display:flex;align-items:center;gap:16px}
+ .content-cta-row .cta-copy{flex:1}
+ .module.two-col .module-body{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center}
+ .module.two-col .module-content{max-width:640px;text-align:left}
+.module.two-col .module-actions{margin-top:12px;display:flex;justify-content:center}
+/* 变体：图在右 */
+.module.two-col.layout-right-image .module-content{order:1}
+.module.two-col.layout-right-image .module-media{order:2}
+/* 变体：图在左 */
+.module.two-col.layout-left-image .module-media{order:1}
+.module.two-col.layout-left-image .module-content{order:2}
+/* 媒体占位（可替换为图片） */
+.module-media{border-radius:12px;border:1px dashed rgba(255,255,255,.22);background:linear-gradient(135deg,rgba(78,163,255,.12),rgba(159,240,255,.08));box-shadow:0 10px 30px rgba(13,70,150,.14);min-height:220px;aspect-ratio:16/9;position:relative;overflow:hidden}
+.module-media img{width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit}
+.module-media::after{content:"";position:absolute;inset:-1px;border-radius:inherit;mix-blend-mode:screen;opacity:.8;background:linear-gradient(120deg, rgba(255,255,255,0) 40%, rgba(120,180,255,.18) 50%, rgba(255,255,255,0) 60%);animation:glimmer 6s linear infinite;animation-play-state:paused}
+.module-media:hover::after{animation-play-state:running}
+@media (max-width:640px){
+  .module{border-radius:14px}
+  .module-header{padding:14px 12px}
+  .module-body{padding:14px 12px}
+  .module.two-col .module-body{grid-template-columns:1fr;gap:12px}
+}
+.brand-stars, .academy{padding:36px 0;background:linear-gradient(180deg,#091a34 0%, #0b1f3a 100%);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.brand-stars h2, .academy h2{
+  background:linear-gradient(135deg,#9fd8ff 0%,#4EA3FF 55%,#9ff0ff 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 10px rgba(78,163,255,.12), 0 0 20px rgba(98,200,255,.06);
+  text-align:center;margin:0 0 6px;
+}
+.brand-stars .section-descr, .academy .section-descr{color:#aee0ff;letter-spacing:.4px;margin:6px 0 8px;text-align:center;font-weight:600}
+.brand-stars .section-sub, .academy .section-sub{line-height:1.8;max-width:900px;margin:6px auto 0;color:var(--muted);text-align:center}
 
 /* Footer */
 .site-footer{background:#0b1f3a;color:#cfe3ff;padding:40px 0}
@@ -234,9 +280,9 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
   .portfolio-grid{grid-template-columns:1fr}
   .portfolio-grid.mixed{grid-template-columns:1fr}
   .footer-inner{flex-direction:column}
-  .hero{padding:80px 0;min-height:56vh}
-  .hero-title{font-size:56px;margin-bottom:22px}
-  .tagline{font-size:18px}
+  .hero{padding:58px 0 36px;min-height:30vh}
+  .hero-title{font-size:46px;margin-bottom:16px}
+  .tagline{font-size:16px}
   .portfolio-grid.masonry{column-count:1}
   .portfolio-grid.carousel{gap:12px}
   .portfolio-grid.carousel .work-card{width:85vw}
@@ -280,7 +326,7 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 .carousel .carousel-track{display:flex;transition:transform .35s ease;will-change:transform}
 .carousel .slide{flex:0 0 100%}
 .carousel .media{width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;background:#0b1f3a}
-.carousel .media img{width:100%;height:100%;object-fit:cover;display:block}
+.carousel .media img{width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit}
 .carousel.design{overflow:visible;perspective:1200px;border:none;background:transparent;box-shadow:none}
 .carousel.design .carousel-track{align-items:center;gap:24px;transform-style:preserve-3d;}
 .carousel.design .slide{flex:0 0 clamp(320px, 46vw, 640px);display:grid;place-items:center;transition:transform .45s cubic-bezier(.22,.84,.36,1), opacity .35s ease, filter .35s ease;}
@@ -340,7 +386,7 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 
 /* Banner 下方动态背景（仅 Banner 下方显示） */
 body::after{
-  content:"";position:fixed;left:-10%;right:-10%;top:68vh;bottom:-10%;z-index:-1;
+  content:"";position:fixed;left:-10%;right:-10%;top:45.33vh;bottom:-10%;z-index:-1;
   background:
     radial-gradient(1100px 450px at 20% 80%, rgba(98,200,255,.12), rgba(10,23,48,0) 70%),
     radial-gradient(1100px 450px at 80% 85%, rgba(47,125,255,.12), rgba(10,23,48,0) 70%);
@@ -353,5 +399,5 @@ body::after{
   50%{transform:translate3d(0,-1.5vh,0) scale(1.02);filter:hue-rotate(10deg) blur(20px);opacity:.46}
   100%{transform:translate3d(0,-3vh,0) scale(1.03);filter:hue-rotate(18deg) blur(18px);opacity:.50}
 }
-@media (max-width:640px){body::after{top:56vh}}
+@media (max-width:640px){body::after{top:30vh}}
 @media (prefers-reduced-motion: reduce){body::after{animation:none}}

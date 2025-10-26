@@ -1,5 +1,5 @@
 // 星文绘梦 | 媒体缓存 Service Worker
-const CACHE_NAME = 'xwhm-media-v3';
+const CACHE_NAME = 'xwhm-media-v4';
 const MEDIA_HOSTS = ['my-website-assets.tos-cn-beijing.volces.com'];
 
 self.addEventListener('install', (event) => {

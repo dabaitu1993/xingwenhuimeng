@@ -197,16 +197,32 @@
     });
   }
 
-  // 封面视频：懒加载 metadata 显示第一帧 + 播放按钮（适用于所有区块）
+  // 封面海报回退：若自定义海报不存在，回退到通用占位图
+  function applyPosterWithFallback(v){
+    const placeholder = 'assets/images/video-placeholder.svg';
+    const desired = (v && v.dataset && v.dataset.poster) ? v.dataset.poster : null;
+    if(desired){
+      const img = new Image();
+      img.onload = function(){ v.poster = desired; v.classList.add('ready'); };
+      img.onerror = function(){ v.poster = placeholder; v.classList.add('ready'); };
+      img.src = desired;
+    }else{
+      v.poster = placeholder;
+      v.classList.add('ready');
+    }
+  }
+
+  // 封面视频：懒加载海报 + 播放按钮（适用于所有区块）
   const coverVideos = document.querySelectorAll('.work-card .cover video');
   if(coverVideos.length){
+    // 立即尝试应用海报，避免此前已被占位图覆盖的元素不再更新
+    coverVideos.forEach(v=>{ if(v && !v.classList.contains('ready')) applyPosterWithFallback(v); });
     const preloadInView = new IntersectionObserver(entries=>{
       entries.forEach(e=>{
         if(e.isIntersecting){
-          const v = e.target; if(!v.getAttribute('src') && v.dataset.src){
-            v.preload = 'metadata'; v.src = v.dataset.src;
-            v.addEventListener('loadeddata', ()=> v.classList.add('ready'), {once:true});
-          }
+          const v = e.target;
+          // 使用海报回退逻辑，避免自定义海报缺失出现空白
+          applyPosterWithFallback(v);
           preloadInView.unobserve(v);
         }
       });
@@ -253,7 +269,10 @@
       const preloadInViewVideo = new IntersectionObserver(entries=>{
         entries.forEach(e=>{
           if(e.isIntersecting){
-            const v = e.target; if(!v.getAttribute('src') && v.dataset.src){
+            const v = e.target;
+            // 为动态视频在进入视窗时设置封面（带回退）
+            applyPosterWithFallback(v);
+            if(!v.getAttribute('src') && v.dataset.src){
               v.preload = 'metadata'; v.src = v.dataset.src;
               v.addEventListener('loadeddata', ()=> v.classList.add('ready'), {once:true});
             }
@@ -294,6 +313,11 @@
         if(isVideo){
           const v = document.createElement('video');
           v.setAttribute('muted',''); v.setAttribute('playsinline',''); v.preload = 'none'; v.dataset.src = url;
+          // 支持自定义海报；如果 manifest 中提供 poster 字段则使用，否则用占位图
+          if(item.poster){
+            const posterUrl = buildUrl(base, item.poster);
+            v.dataset.poster = posterUrl;
+          }
           cover.appendChild(v);
           art.appendChild(cover); if(head) art.appendChild(head);
           grid.appendChild(art);
