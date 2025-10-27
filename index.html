@@ -43,50 +43,42 @@
   <section class="hero" id="home">
     <div class="container hero-inner">
       <div class="hero-copy">
-        <h1 class="hero-title">星文绘梦</h1>
+        <!-- 使用图片展示站点标题，保留隐藏文本用于可访问性 -->
+        <h1 class="hero-title sr-only">星文绘梦</h1>
+        <img class="hero-logo" src="assets/images/posters/星文绘梦.png" alt="星文绘梦" />
         <p class="tagline">以AIGC，点亮品牌星光，与创作者以技筑梦</p>
         <p class="sub">从全球 TOP 级宣传片到小说短剧，别人做不到的 “低成本 + 电影级质感”，我们让创意直接落地</p>
       </div>
     </div>
   </section>
   
-  <!-- 新增：星耀品牌 与 绘梦AI研习社 -->
-  <section class="brand-stars" id="brand">
+  <!-- 星耀品牌 + 绘梦AI研习社：并排卡片布局（更紧凑） -->
+  <section class="modules-duo" id="brand-academy">
     <div class="container">
-      <div class="module module-brand two-col layout-right-image">
-        <div class="module-header">
-          <h2>星耀品牌</h2>
-          <p class="section-descr">品宣·带货·影视IP</p>
-          
-        </div>
-        <div class="module-body">
-          <div class="module-content">
-            <p class="section-sub">从全球TOP级宣传片，到私域营销素材</p>
-            <p class="section-sub">AIGC超低成本+商用级质感，激活你的品牌高光</p>
-            
+      <div class="modules-grid">
+        <!-- 星耀品牌卡片（文案恢复原始） -->
+        <article class="module-card">
+          <div class="card-head">
+            <span class="card-icon" aria-hidden="true">✨</span>
+            <h3 class="card-title">星耀品牌</h3>
           </div>
-          <div class="module-media" aria-hidden="true"><img src="assets/images/posters/星耀品牌.png" alt="星耀品牌" /></div>
-        </div>
-      </div>
-    </div>
-  </section>
+          <p class="card-meta">品宣·带货·影视IP</p>
+          <p class="card-sub">从全球TOP级宣传片，到私域营销素材</p>
+          <p class="card-sub">AIGC超低成本+商用级质感，激活你的品牌高光</p>
+          <div class="card-actions"><a class="btn primary small" href="#">立即咨询</a></div>
+        </article>
 
-  <section class="academy" id="academy">
-    <div class="container">
-      <div class="module module-ai two-col layout-left-image">
-        <div class="module-header">
-          <h2>绘梦AI研习社</h2>
-          <p class="section-descr">学工具·练方法·搞变现</p>
-          
-        </div>
-        <div class="module-body">
-          <div class="module-media" aria-hidden="true"><img src="assets/images/posters/绘梦AI研习社.png" alt="绘梦AI研习社" /></div>
-          <div class="module-content">
-            <p class="section-sub">无论你是零基础小白，还是寻求进阶的内容玩家。</p>
-             <p class="section-sub">都能用 AIGC 绘制属于自己的内容梦想。</p>
-             <div class="module-actions"><a class="btn primary small" href="#">立即报名</a></div>
+        <!-- 绘梦AI研习社卡片（文案恢复原始） -->
+        <article class="module-card">
+          <div class="card-head">
+            <span class="card-icon" aria-hidden="true">🧠</span>
+            <h3 class="card-title">绘梦AI研习社</h3>
           </div>
-        </div>
+          <p class="card-meta">学工具·练方法·搞变现</p>
+          <p class="card-sub">无论你是零基础小白，还是寻求进阶的内容玩家。</p>
+          <p class="card-sub">都能用 AIGC 绘制属于自己的内容梦想。</p>
+          <div class="card-actions"><a class="btn primary small" href="#">立即报名</a></div>
+        </article>
       </div>
     </div>
   </section>

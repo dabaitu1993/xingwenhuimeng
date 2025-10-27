@@ -112,6 +112,10 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
   -webkit-background-clip:text;background-clip:text;color:transparent;
   text-shadow:0 0 10px rgba(78,163,255,.16), 0 0 20px rgba(98,200,255,.08);
 }
+/* 首页标题图片 */
+.hero-logo{display:block;margin:0 auto 12px;width:clamp(240px,48vw,640px);height:auto;border-radius:12px;box-shadow:0 10px 30px rgba(47,125,255,.18)}
+/* 仅屏幕阅读器可见的隐藏文本 */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .feature-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
 .card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 8px 24px rgba(13,70,150,.06);padding:18px}
 .feature-card .icon{width:64px;height:64px}
@@ -255,6 +259,24 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 }
 .brand-stars .section-descr, .academy .section-descr{color:#aee0ff;letter-spacing:.4px;margin:6px 0 8px;text-align:center;font-weight:600}
 .brand-stars .section-sub, .academy .section-sub{line-height:1.8;max-width:900px;margin:6px auto 0;color:var(--muted);text-align:center}
+
+/* 并排卡片布局（星耀品牌 + 绘梦AI研习社） */
+.modules-duo{padding:36px 0;background:linear-gradient(180deg,#091a34 0%, #0b1f3a 100%);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.modules-duo .modules-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.module-card{background:var(--card);border-radius:18px;box-shadow:0 8px 24px rgba(13,70,150,.06);border:1px solid var(--border);padding:22px;color:var(--text)}
+.module-card .card-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.module-card .card-icon{width:42px;height:42px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg, rgba(47,125,255,.22), rgba(98,200,255,.18));border:1px solid rgba(120,180,255,.28);color:#eaf3ff;font-size:20px;box-shadow:0 6px 16px rgba(47,125,255,.18)}
+.module-card .card-title{margin:0;font-size:18px;letter-spacing:.2px;color:#eaf3ff}
+.module-card .card-meta{margin:2px 0 6px;color:#aee0ff;font-weight:700;letter-spacing:.3px}
+.module-card .card-sub{margin:8px 0 14px;color:var(--muted);line-height:1.7}
+.module-card .card-list{padding:0;margin:0 0 14px;list-style:none;display:grid;gap:8px}
+.module-card .card-list li{position:relative;padding-left:22px;color:var(--muted)}
+.module-card .card-list li::before{content:"";position:absolute;left:0;top:.35em;width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,#2f7dff,#62c8ff);box-shadow:0 0 0 2px rgba(140,200,255,.12)}
+.module-card .card-actions{margin-top:6px}
+.modules-duo .btn.primary{border-radius:999px;padding:10px 18px}
+@media (max-width:720px){
+  .modules-duo .modules-grid{grid-template-columns:1fr}
+}
 
 /* Footer */
 .site-footer{background:#0b1f3a;color:#cfe3ff;padding:40px 0}
