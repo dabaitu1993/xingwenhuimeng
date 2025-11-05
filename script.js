@@ -688,3 +688,137 @@
     }
   }
 })();
+
+// 背景：白色星辰粒子（有大有小，朦胧外发光，连接线）
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    const host = document.getElementById('particles-js');
+    if(!host) return;
+    const canvas = document.createElement('canvas');
+    host.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+
+    // 设备像素比适配，保证外发光清晰
+    let dpr = Math.max(1, Math.min(2.5, window.devicePixelRatio || 1));
+    function resize(){
+      const w = window.innerWidth, h = window.innerHeight;
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // 用CSS像素绘制
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const particles = [];
+    const baseDensity = 14000;
+    const count = Math.min(220, Math.floor((window.innerWidth*window.innerHeight)/baseDensity));
+
+    function rand(min, max){ return min + Math.random()*(max-min); }
+    // 近似真实星色（按色温分布），并加入轻微去饱和与随机色差
+    function pickStarColor(){
+      const u = Math.random();
+      let c;
+      if(u < 0.18) c = [170+rand(-12,12), 205+rand(-10,10), 255];           // 蓝白（比例提升）
+      else if(u < 0.38) c = [235+rand(-8,8), 242+rand(-8,8), 255];           // 中性偏冷白
+      else if(u < 0.60) c = [255, 244+rand(-10,10), 234+rand(-10,10)];       // 黄白
+      else if(u < 0.80) c = [255, 236+rand(-12,12), 200+rand(-12,12)];       // 黄色
+      else if(u < 0.94) c = [255, 210+rand(-12,12), 170+rand(-12,12)];       // 橙色
+      else c = [255, 185+rand(-12,12), 160+rand(-12,12)];                    // 红橙
+      const desat = 0.06; // 轻微去饱和，贴近视觉真实
+      const gray = (c[0]+c[1]+c[2])/3;
+      c = c.map(v => Math.min(255, Math.max(0, Math.round(v*(1-desat) + gray*desat))));
+      return { r: c[0]|0, g: c[1]|0, b: c[2]|0 };
+    }
+
+    function pickRadius(){
+      const u = Math.random();
+      if(u < 0.72) return 1.0 + Math.random()*1.6;    // 1.0 - 2.6（小星）
+      if(u < 0.94) return 2.4 + Math.random()*2.0;    // 2.4 - 4.4（中星）
+      return 4.8 + Math.random()*1.8;                 // 4.8 - 6.6（亮星更大但不“愣”）
+    }
+    for(let i=0; i<count; i++){
+      const r = pickRadius();
+      particles.push({
+        x: Math.random()*window.innerWidth,
+        y: Math.random()*window.innerHeight,
+        r,
+        vx: (Math.random()*0.36 - 0.18),
+        vy: (Math.random()*0.36 - 0.18),
+        bright: r >= 4.8,
+        color: pickStarColor(),
+        twinklePhase: Math.random()*Math.PI*2,
+        twinkleSpeed: 0.5 + Math.random()*1.2,
+        twinkleAmp: r >= 4.8 ? 0.50 : (r >= 2.4 ? 0.27 : 0.12),
+      });
+    }
+
+    const linkDist = 140; // 连接线阈值略增，画面更连贯
+
+    function drawStar(p, alpha){
+      // 使用 lighter 叠加增强柔光感
+      const prevComp = ctx.globalCompositeOperation;
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.shadowColor = `rgba(${p.color.r},${p.color.g},${p.color.b},${1.0*alpha})`;
+      ctx.shadowBlur = (26 + p.r*3.4) * dpr; // 阴影半径提升，柔光更明显
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(${p.color.r},${p.color.g},${p.color.b},${alpha})`;
+      ctx.fill();
+      ctx.shadowBlur = 0; ctx.shadowColor = 'transparent';
+      ctx.globalCompositeOperation = prevComp;
+    }
+
+    function connect(){
+      ctx.lineWidth = 0.8 / dpr; // 保持CSS像素下的线宽
+      for(let i=0;i<particles.length;i++){
+        const a = particles[i];
+        for(let j=i+1;j<particles.length;j++){
+          const b = particles[j];
+          const dx = a.x - b.x; const dy = a.y - b.y; const d = Math.sqrt(dx*dx + dy*dy);
+          if(d < linkDist){
+            const t = 1 - d/linkDist;
+            const lineAlpha = Math.max(0.06, 0.22 * t);
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(255,255,255,${lineAlpha})`;
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function step(){
+      // 在设备像素尺寸下清理画布
+      ctx.setTransform(1,0,0,1,0,0);
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+
+      for(const p of particles){
+        p.x += p.vx; p.y += p.vy;
+        // 边界穿越（CSS像素坐标）
+        const W = window.innerWidth, H = window.innerHeight;
+        if(p.x > W) p.x = 0; if(p.x < 0) p.x = W;
+        if(p.y > H) p.y = 0; if(p.y < 0) p.y = H;
+
+        // 基础透明度随尺寸提升
+        let baseAlpha = Math.min(1, 0.34 + p.r*0.09);
+        // 周期性明暗交替：所有星以不同强度呼吸，亮星更明显
+        if(p.twinkleAmp > 0){
+          p.twinklePhase += 0.014 * p.twinkleSpeed;
+          const s = 0.5 + 0.5*Math.sin(p.twinklePhase); // 0..1
+          const sCurve = Math.pow(s, 1.8); // 非线性曲线，增强高光阶段
+          const breathe = baseAlpha*(1-p.twinkleAmp) + baseAlpha*p.twinkleAmp*sCurve;
+          baseAlpha = Math.min(1, breathe);
+        }
+        drawStar(p, baseAlpha);
+      }
+
+      connect();
+      requestAnimationFrame(step);
+    }
+    step();
+  });
+})();

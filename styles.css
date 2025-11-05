@@ -13,7 +13,10 @@ html,body{margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'Inter','PingFang SC','Hiragino Sans GB',-apple-system,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg);} 
 /* 暗色主题微光纹理 */
-body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-index:-1;background:radial-gradient(1200px 400px at 20% 0%, rgba(98,200,255,.16), rgba(10,23,48,0)), radial-gradient(1200px 400px at 80% -10%, rgba(47,125,255,.14), rgba(10,23,48,0));filter:blur(20px);} 
+body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-index:-2;background:radial-gradient(1200px 400px at 20% 0%, rgba(98,200,255,.16), rgba(10,23,48,0)), radial-gradient(1200px 400px at 80% -10%, rgba(47,125,255,.14), rgba(10,23,48,0));filter:blur(20px);} 
+
+/* 粒子背景容器：固定置底，不影响交互 */
+#particles-js{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none}
 
 @keyframes ambientShift{
   0%{ transform:translate3d(0,0,0) scale(1); filter:hue-rotate(0deg) blur(20px); }
@@ -261,9 +264,9 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 .brand-stars .section-sub, .academy .section-sub{line-height:1.8;max-width:900px;margin:6px auto 0;color:var(--muted);text-align:center}
 
 /* 并排卡片布局（星耀品牌 + 绘梦AI研习社） */
-.modules-duo{padding:36px 0;background:linear-gradient(180deg,#091a34 0%, #0b1f3a 100%);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.modules-duo{padding:36px 0;background:transparent;border-top:none;border-bottom:none}
 .modules-duo .modules-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
-.module-card{background:var(--card);border-radius:18px;box-shadow:0 8px 24px rgba(13,70,150,.06);border:1px solid var(--border);padding:22px;color:var(--text)}
+.module-card{background:transparent;border-radius:18px;box-shadow:none;border:1px solid var(--border);padding:22px;color:var(--text)}
 .module-card .card-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
 .module-card .card-icon{width:42px;height:42px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg, rgba(47,125,255,.22), rgba(98,200,255,.18));border:1px solid rgba(120,180,255,.28);color:#eaf3ff;font-size:20px;box-shadow:0 6px 16px rgba(47,125,255,.18)}
 .module-card .card-title{margin:0;font-size:18px;letter-spacing:.2px;color:#eaf3ff}
