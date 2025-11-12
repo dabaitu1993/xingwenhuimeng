@@ -44,11 +44,16 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 .nav-toggle{display:none}
 @media (max-width:640px){
   .header-inner{flex-wrap:wrap;height:auto}
-  .nav{display:none;width:100%}
+  /* 保持第一行：左logo，右菜单按钮；第二行才是菜单 */
+  .logo{order:1}
+  .nav-toggle{order:2;display:inline-flex;align-items:center;justify-content:center;margin-left:auto;
+    border:1px solid rgba(120,180,255,.3);background:rgba(255,255,255,.06);color:#eaf3ff;border-radius:10px;
+    /* 提升触控尺寸（iOS 推荐 >=44px） */
+    min-width:44px;min-height:44px;padding:10px 14px;font-weight:700;font-size:20px;line-height:1}
+  .nav{order:3;display:none;width:100%}
   .site-header.nav-open .nav{display:grid;grid-template-columns:1fr;row-gap:8px;margin-top:8px}
   .nav a{margin:0;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,.06)}
   .nav a:hover{background:linear-gradient(135deg,#2f7dff,#62c8ff);color:#fff;border-color:transparent}
-  .nav-toggle{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(120,180,255,.3);background:rgba(255,255,255,.06);color:#eaf3ff;border-radius:10px;padding:8px 12px;font-weight:700}
 }
 
 /* 贴边纵向导航 */
@@ -426,3 +431,8 @@ body::after{
 }
 @media (max-width:640px){body::after{top:30vh}}
 @media (prefers-reduced-motion: reduce){body::after{animation:none}}
+/* 页脚：ICP备案号链接 */
+.site-footer{margin-top:36px;padding:20px 0;border-top:1px solid var(--border);text-align:center;color:#9fb4d1;font-size:12px}
+.site-footer a{color:inherit;text-decoration:none}
+.site-footer a:hover{text-decoration:underline;color:#cfe3ff}
+@media (max-width:640px){.site-footer{font-size:12px;padding:18px 0;margin-top:28px}}
