@@ -255,6 +255,16 @@
     if(action && url){ action.addEventListener('click', (ev)=>{ ev.preventDefault(); openVideo(url); }); }
   });
 
+  // 构建更高效图片的 picture 元素（支持 AVIF/WebP 回退到原图）
+  function buildPictureElement(meta){
+    // meta: { url, title, avif, webp }
+    const picture = document.createElement('picture');
+    if(meta.avif){ const s = document.createElement('source'); s.type = 'image/avif'; s.srcset = meta.avif; picture.appendChild(s); }
+    if(meta.webp){ const s = document.createElement('source'); s.type = 'image/webp'; s.srcset = meta.webp; picture.appendChild(s); }
+    const img = document.createElement('img'); img.loading = 'lazy'; img.decoding = 'async'; img.alt = meta.title || ''; img.dataset.src = meta.url; picture.appendChild(img);
+    return picture;
+  }
+
   // 动态从 TOS 文件夹 manifest 加载卡片（文件夹名即板块名）
   async function loadSectionFromManifest(grid){
     const base = grid.dataset.source;
@@ -291,13 +301,10 @@
           }
         });
       },{rootMargin:'200px 0px', threshold:0.01});
-      // 懒加载图片
+      // 懒加载图片（支持 picture 内部的 img）
       const lazyImagesIO = new IntersectionObserver(entries=>{
         entries.forEach(e=>{
-          if(e.isIntersecting){
-            const img = e.target; if(!img.src && img.dataset.src){ img.src = img.dataset.src; }
-            lazyImagesIO.unobserve(img);
-          }
+          if(e.isIntersecting){ const img = e.target; if(!img.src && img.dataset.src){ img.src = img.dataset.src; } lazyImagesIO.unobserve(img); }
         });
       },{rootMargin:'200px 0px', threshold:0.01});
       const buildUrl = (b, file)=>{
@@ -344,12 +351,14 @@
           }
           cover.addEventListener('click', ()=> openVideo(url));
         }else{
-          // 图片：不裁剪，懒加载
-          const img = document.createElement('img'); img.loading = 'lazy'; img.dataset.src = url; img.alt = title || '';
-          cover.appendChild(img);
+          // 图片：不裁剪，懒加载；若 manifest 提供更高效格式，优先使用
+          const meta = { url, title, avif: item.avif ? buildUrl(base, item.avif) : null, webp: item.webp ? buildUrl(base, item.webp) : null };
+          const el = (meta.avif || meta.webp) ? buildPictureElement(meta) : (function(){ const img = document.createElement('img'); img.loading = 'lazy'; img.decoding = 'async'; img.dataset.src = url; img.alt = title || ''; return img; })();
+          cover.appendChild(el);
           art.appendChild(cover); if(head) art.appendChild(head);
           grid.appendChild(art);
-          lazyImagesIO.observe(img);
+          const lazyTarget = el.tagName.toLowerCase()==='picture' ? el.querySelector('img') : el;
+          if(lazyTarget) lazyImagesIO.observe(lazyTarget);
         }
       });
     }catch(err){
@@ -401,20 +410,27 @@
       const gallery = items.map(item=>{
         const file = item.file || ''; const title = item.title || file.replace(/\.[^/.]+$/,'');
         const url = buildUrl(base, file);
-        return { url, title };
+        const avif = item.avif ? buildUrl(base, item.avif) : null;
+        const webp = item.webp ? buildUrl(base, item.webp) : null;
+        return { url, title, avif, webp };
       });
       gallery.forEach((meta, i)=>{
-        const img = document.createElement('img'); img.loading = 'lazy'; img.alt = meta.title; img.dataset.src = meta.url; img.dataset.index = String(i);
-        container.appendChild(img);
+        let el;
+        if(meta.avif || meta.webp){
+          el = buildPictureElement(meta);
+          el.querySelector('img').dataset.index = String(i);
+        }else{
+          const img = document.createElement('img'); img.loading = 'lazy'; img.decoding = 'async'; img.alt = meta.title; img.dataset.src = meta.url; img.dataset.index = String(i); el = img;
+        }
+        container.appendChild(el);
       });
       initDesignLazy(container);
       // 点击图片打开弹窗并支持前后切换
       container.addEventListener('click', (e)=>{
         const target = e.target; if(!(target instanceof Element)) return;
-        if(target.tagName.toLowerCase()==='img'){
-          const i = parseInt(target.dataset.index||'0', 10) || 0;
-          openImageLightbox(gallery, i);
-        }
+        const tag = target.tagName.toLowerCase();
+        const imgEl = tag==='img' ? target : (tag==='picture' ? target.querySelector('img') : null);
+        if(imgEl){ const i = parseInt(imgEl.dataset.index||'0', 10) || 0; openImageLightbox(gallery, i); }
       });
     }catch(err){
       // 瀑布流回退：直接生成若干图片
@@ -422,16 +438,15 @@
       container.innerHTML = '';
       const gallery = items.map(item=>({ url: buildUrl(base, item.file), title: item.title }));
       gallery.forEach((meta, i)=>{
-        const img = document.createElement('img'); img.loading = 'lazy'; img.alt = meta.title; img.dataset.src = meta.url; img.dataset.index = String(i);
+        const img = document.createElement('img'); img.loading = 'lazy'; img.decoding = 'async'; img.alt = meta.title; img.dataset.src = meta.url; img.dataset.index = String(i);
         container.appendChild(img);
       });
       initDesignLazy(container);
       container.addEventListener('click', (e)=>{
         const target = e.target; if(!(target instanceof Element)) return;
-        if(target.tagName.toLowerCase()==='img'){
-          const i = parseInt(target.dataset.index||'0', 10) || 0;
-          openImageLightbox(gallery, i);
-        }
+        const tag = target.tagName.toLowerCase();
+        const imgEl = tag==='img' ? target : (tag==='picture' ? target.querySelector('img') : null);
+        if(imgEl){ const i = parseInt(imgEl.dataset.index||'0', 10) || 0; openImageLightbox(gallery, i); }
       });
       console.warn('设计瀑布流动态加载失败，已使用回退:', err);
     }
@@ -499,7 +514,7 @@
       const slides = selected.map(meta=>{
         const slide = document.createElement('div'); slide.className = 'slide';
         const media = document.createElement('div'); media.className = 'media';
-        const img = document.createElement('img'); img.dataset.src = meta.url; img.loading = 'lazy'; img.alt = meta.title;
+        const img = document.createElement('img'); img.dataset.src = meta.url; img.loading = 'lazy'; img.decoding = 'async'; img.alt = meta.title;
         media.appendChild(img); slide.appendChild(media); return slide;
       });
       slides.forEach(s=> track.appendChild(s));
@@ -712,6 +727,8 @@
     const canvas = document.createElement('canvas');
     host.appendChild(canvas);
     const ctx = canvas.getContext('2d');
+    // 动效可访问性：用户偏好减少动效时，仅渲染静态星空
+    const preferReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // 设备像素比适配，保证外发光清晰
     let dpr = Math.max(1, Math.min(2.5, window.devicePixelRatio || 1));
@@ -731,8 +748,11 @@
     window.addEventListener('resize', resize);
 
     const particles = [];
-    const baseDensity = 14000;
-    const count = Math.min(220, Math.floor((window.innerWidth*window.innerHeight)/baseDensity));
+    const baseDensity = 16000; // 降密度，减轻主线程压力
+    const deviceMem = (navigator.deviceMemory||4);
+    const hc = (navigator.hardwareConcurrency||4);
+    const perfScale = Math.max(0.6, Math.min(1.0, (deviceMem/4) * (hc/4)));
+    const count = Math.floor(Math.min(200, Math.floor((window.innerWidth*window.innerHeight)/baseDensity)) * perfScale);
 
     function rand(min, max){ return min + Math.random()*(max-min); }
     // 近似真实星色（按色温分布），并加入轻微去饱和与随机色差
@@ -773,7 +793,8 @@
       });
     }
 
-    const linkDist = 140; // 连接线阈值略增，画面更连贯
+    let linkDist = 140; // 连接线阈值略增，画面更连贯
+    if(!isDesktopFast) linkDist = 120; // 移动端略降连接距离
 
     function drawStar(p, alpha){
       // 使用 lighter 叠加增强柔光感
@@ -789,26 +810,51 @@
       ctx.globalCompositeOperation = prevComp;
     }
 
+    // 连接线：帧间节流 + 简易空间网格剔除，显著降低比较次数
+    let skip = 0;
     function connect(){
-      ctx.lineWidth = 0.8 / dpr; // 保持CSS像素下的线宽
-      for(let i=0;i<particles.length;i++){
-        const a = particles[i];
-        for(let j=i+1;j<particles.length;j++){
-          const b = particles[j];
-          const dx = a.x - b.x; const dy = a.y - b.y; const d = Math.sqrt(dx*dx + dy*dy);
-          if(d < linkDist){
-            const t = 1 - d/linkDist;
-            const lineAlpha = Math.max(0.06, 0.22 * t);
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(255,255,255,${lineAlpha})`;
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.stroke();
+      const mod = isDesktopFast ? 2 : 3; // 每2/3帧画一次连接线
+      skip = (skip+1)%mod; if(skip!==0) return;
+      ctx.lineWidth = 0.8 / dpr;
+      const cell = 120;
+      const cols = Math.ceil(window.innerWidth / cell);
+      const rows = Math.ceil(window.innerHeight / cell);
+      const grid = Array.from({length: cols*rows}, ()=>[]);
+      const idx = (x,y)=> Math.min(cols*rows-1, Math.max(0, (y*cols + x)));
+      for(const p of particles){
+        const gx = Math.min(cols-1, Math.max(0, Math.floor(p.x / cell)));
+        const gy = Math.min(rows-1, Math.max(0, Math.floor(p.y / cell)));
+        grid[idx(gx,gy)].push(p);
+      }
+      for(let gy=0; gy<rows; gy++){
+        for(let gx=0; gx<cols; gx++){
+          const bucket = grid[idx(gx,gy)];
+          // 与同格及相邻8格尝试连接
+          for(const neighbor of [ [0,0],[1,0],[0,1],[1,1],[-1,0],[0,-1],[-1,-1],[1,-1],[-1,1] ]){
+            const nx = gx + neighbor[0], ny = gy + neighbor[1];
+            if(nx<0||ny<0||nx>=cols||ny>=rows) continue;
+            const bucket2 = grid[idx(nx,ny)];
+            for(const a of bucket){
+              for(const b of bucket2){
+                if(a===b) continue;
+                const dx = a.x - b.x; const dy = a.y - b.y; const d = Math.sqrt(dx*dx + dy*dy);
+                if(d < linkDist){
+                  const t = 1 - d/linkDist;
+                  const lineAlpha = Math.max(0.06, 0.22 * t);
+                  ctx.beginPath();
+                  ctx.strokeStyle = `rgba(255,255,255,${lineAlpha})`;
+                  ctx.moveTo(a.x, a.y);
+                  ctx.lineTo(b.x, b.y);
+                  ctx.stroke();
+                }
+              }
+            }
           }
         }
       }
     }
 
+    let running = true;
     function step(){
       // 在设备像素尺寸下清理画布
       ctx.setTransform(1,0,0,1,0,0);
@@ -835,9 +881,12 @@
         drawStar(p, baseAlpha);
       }
 
-      connect();
-      requestAnimationFrame(step);
+      if(!preferReduced) connect();
+      if(running) requestAnimationFrame(step);
     }
-    step();
+    // 页面可见性变化：不可见时暂停动画，降低 CPU 占用
+    document.addEventListener('visibilitychange', ()=>{ running = document.visibilityState === 'visible'; if(running) requestAnimationFrame(step); });
+    // 初始化延后到空闲时间，降低首屏主线程竞争
+    if('requestIdleCallback' in window){ requestIdleCallback(()=> step(), {timeout: 800}); } else { setTimeout(()=> step(), 200); }
   });
 })();

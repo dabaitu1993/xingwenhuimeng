@@ -5,10 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>星文绘梦 · AIGC作品集 品宣网站</title>
   <meta name="description" content="星文绘梦 · AIGC作品集与能力展示，基于真实项目文本整理，蓝色渐变清爽视觉，响应式布局。" />
+  <!-- 资源优化：字体与媒体域预连接/预获取 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="//my-website-assets.tos-cn-beijing.volces.com">
+  <link rel="preconnect" href="https://my-website-assets.tos-cn-beijing.volces.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=design-full-1" />
+  <!-- 首屏关键图片预加载（站点 Logo） -->
+  <link rel="preload" as="image" href="assets/images/posters/星文绘梦.png" fetchpriority="high">
 </head>
 <body>
   <!-- 粒子背景容器（置底，不影响交互） -->
@@ -47,7 +52,7 @@
       <div class="hero-copy">
         <!-- 使用图片展示站点标题，保留隐藏文本用于可访问性 -->
         <h1 class="hero-title sr-only">星文绘梦</h1>
-        <img class="hero-logo" src="assets/images/posters/星文绘梦.png" alt="星文绘梦" />
+        <img class="hero-logo" src="assets/images/posters/星文绘梦.png" alt="星文绘梦" decoding="async" fetchpriority="high" />
         <p class="tagline">以AIGC，点亮品牌星光，与创作者以技筑梦</p>
         <p class="sub">从全球 TOP 级宣传片到小说短剧，别人做不到的 “低成本 + 电影级质感”，我们让创意直接落地</p>
       </div>
