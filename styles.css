@@ -382,7 +382,7 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
   .video-modal .modal-close{top:-14px;right:-14px;width:48px;height:48px;font-size:22px}
 }
 /* 封面播放指示（适用于所有作品卡片） */
-.work-card .cover{cursor:pointer}
+.work-card .cover{cursor:pointer;position:relative}
 .work-card .cover::before{content:"";display:none}
 .work-card:hover .cover::before{opacity:.85}
 
@@ -392,7 +392,7 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 .cover:hover .cover-play{transform:translate(-50%,-50%) scale(1.06)}
 .cover .cover-play:focus{outline:2px solid #fff3}
 /* 播放 SVG 图标尺寸与不可拦截点击 */
-.cover .cover-play .icon{width:26px;height:26px;display:block;pointer-events:none}
+.cover .cover-play .icon{width:22px;height:22px;display:block;pointer-events:none;transform:translateX(3px)}
 /* 封面视频就绪淡入（已存在，确保仍生效） */
 .work-card .cover video{opacity:0;transition:opacity .35s ease}
 .work-card .cover video.ready{opacity:1}
