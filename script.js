@@ -1,5 +1,44 @@
 // 交互脚本（封面第一帧 + 播放按钮 + 弹窗播放器）
 (function(){
+  // 统一资源域：将本地 assets/images 映射到 TOS
+  const TOS_BASE = 'https://my-website-assets.tos-cn-beijing.volces.com/';
+  const toTosUrl = (localUrl)=>{
+    if(!localUrl) return localUrl;
+    const prefixes = ['assets/images/', './assets/images/', '/assets/images/'];
+    const hit = prefixes.find(p=> localUrl.startsWith(p));
+    if(!hit) return localUrl;
+    const rest = localUrl.slice(hit.length);
+    const encoded = rest.split('/').map(seg=> encodeURIComponent(seg)).join('/');
+    return TOS_BASE + encoded;
+  };
+  const rewriteAttrIfLocal = (el, attr)=>{
+    if(!el || !attr) return;
+    const val = el.getAttribute(attr);
+    if(!val) return;
+    const next = toTosUrl(val);
+    if(next !== val) el.setAttribute(attr, next);
+  };
+  const rewriteSrcsetIfLocal = (el)=>{
+    if(!el) return;
+    const val = el.getAttribute('srcset');
+    if(!val) return;
+    const parts = val.split(',').map(s=> s.trim()).filter(Boolean).map(part=>{
+      const sp = part.split(/\s+/);
+      const url = sp[0];
+      const tail = sp.slice(1).join(' ');
+      const next = toTosUrl(url);
+      return tail ? `${next} ${tail}` : next;
+    });
+    const next = parts.join(', ');
+    if(next !== val) el.setAttribute('srcset', next);
+  };
+  // 在 DOM 就绪后执行一次统一重写
+  (function rewriteAllLocalAssetsToTOS(){
+    const imgs = document.querySelectorAll('img[src]'); imgs.forEach(img=> rewriteAttrIfLocal(img, 'src'));
+    const srcsetImgs = document.querySelectorAll('img[srcset], source[srcset]'); srcsetImgs.forEach(rewriteSrcsetIfLocal);
+    const posters = document.querySelectorAll('video[poster]'); posters.forEach(v=> rewriteAttrIfLocal(v, 'poster'));
+    const dataPosters = document.querySelectorAll('[data-poster]'); dataPosters.forEach(el=> rewriteAttrIfLocal(el, 'data-poster'));
+  })();
   // Header 交互与分类筛选（保留原有逻辑）
   const header = document.querySelector('.site-header');
   if (header) {
@@ -199,7 +238,7 @@
 
   // 封面海报回退：若自定义海报不存在，回退到通用占位图
   function applyPosterWithFallback(v){
-    const placeholder = 'assets/images/video-placeholder.svg';
+    const placeholder = toTosUrl('assets/images/video-placeholder.svg');
     const desired = (v && v.dataset && v.dataset.poster) ? v.dataset.poster : null;
     if(desired){
       const img = new Image();
