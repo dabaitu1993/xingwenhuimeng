@@ -115,9 +115,14 @@
   // 英雄图轻视差（若存在）
   const heroImg = document.querySelector('.hero-art img');
   if(heroImg){
-    window.addEventListener('scroll',()=>{
-      const y = window.scrollY; heroImg.style.transform = `translateY(${y*0.06}px) scale(1.02)`;
-    });
+    const disableOnSmall = window.matchMedia('(max-width: 640px)').matches || window.matchMedia('(pointer: coarse)').matches;
+    if(!disableOnSmall){
+      window.addEventListener('scroll', ()=>{
+        const y = window.scrollY; heroImg.style.transform = `translateY(${y*0.06}px) scale(1.02)`;
+      });
+    } else {
+      heroImg.style.transform = '';
+    }
   }
 
   // 回到顶部按钮：滚动显隐与平滑滚动

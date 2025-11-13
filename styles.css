@@ -129,6 +129,15 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 }
 /* 首页标题图片 */
 .hero-logo{display:block;margin:0 auto 12px;width:clamp(240px,48vw,640px);height:auto;border-radius:12px;box-shadow:0 10px 30px rgba(47,125,255,.18)}
+/* 小屏优化：缩小标题与 LOGO，收紧英雄区间距与容器内边距 */
+@media (max-width:640px){
+  .container{padding:0 16px}
+  .hero{padding:56px 0 28px;min-height:auto}
+  .hero-title{font-size:36px;letter-spacing:1px}
+  .tagline{font-size:16px}
+  .hero-copy .sub{font-size:14px}
+  .hero-logo{width:clamp(180px,66vw,420px)}
+}
 /* 仅屏幕阅读器可见的隐藏文本 */
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .feature-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
@@ -190,6 +199,11 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
   animation:glimmer 6s linear infinite;animation-play-state:paused;transition:opacity .35s ease, filter .35s ease;
 }
 .work-card:hover .cover::after{animation-play-state:running;filter:brightness(1.06);opacity:.9}
+/* 小屏禁用 hover 位移，避免触控设备错位抖动 */
+@media (max-width:640px){
+  .work-card:hover{transform:none;box-shadow:none}
+  .portfolio-grid.carousel .work-card:hover{transform:none;box-shadow:none}
+}
 @keyframes glimmer{
   0%{background-position:0% 50%, 0% 50%, 0% 50%, 0% 50%}
   50%{background-position:50% 50%, 30% 70%, 70% 30%, 100% 100%}
