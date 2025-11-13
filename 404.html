@@ -14,18 +14,17 @@
       }
       html,body{height:100%}
       body{margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans",sans-serif; background:radial-gradient(1200px 600px at 50% -10%, #12305e 0%, #0b1f3a 60%, #081428 100%); color:var(--text);}
-      .wrap{min-height:100%; display:grid; place-items:center; padding:24px}
-      .card{position:relative; max-width:960px; width:100%; border:1px solid var(--border); border-radius:16px; overflow:hidden; background:linear-gradient(180deg, rgba(8,20,40,.80), rgba(8,20,40,.55)); box-shadow:0 16px 40px rgba(13,70,150,.18)}
-      .inner{display:grid; gap:20px; padding:40px; text-align:center}
-      .code{font-size:clamp(72px, 12vw, 160px); line-height:1; font-weight:800; letter-spacing:.06em; margin:8px 0; background:linear-gradient(135deg, var(--brand-start), var(--brand-end)); -webkit-background-clip:text; background-clip:text; color:transparent;}
-      .title{font-size:clamp(22px, 3.6vw, 34px); font-weight:700}
-      .desc{font-size:clamp(14px, 2.4vw, 18px); color:var(--muted)}
-      /* 移除 CTA 与提示后，略微增大上下留白以保持平衡 */
-      .inner{padding:48px}
+      .wrap{min-height:100vh; display:grid; place-items:center; padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+      .card{position:relative; max-width:clamp(720px, 60vw, 1100px); width:100%; border:1px solid var(--border); border-radius:16px; overflow:hidden; background:linear-gradient(180deg, rgba(8,20,40,.80), rgba(8,20,40,.55)); box-shadow:0 16px 40px rgba(13,70,150,.18)}
+      .inner{display:grid; gap:clamp(16px, 3vw, 24px); padding:clamp(32px, 6vw, 64px); text-align:center}
+      .code{font-size:clamp(72px, 14vw, 200px); line-height:1; font-weight:800; letter-spacing:.06em; margin:8px 0; background:linear-gradient(135deg, var(--brand-start), var(--brand-end)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+      .title{font-size:clamp(22px, 2.8vw, 36px); font-weight:700}
+      .desc{max-width:62ch; font-size:clamp(15px, 1.8vw, 19px); line-height:1.9; color:var(--muted)}
+      /* 响应式留白由 clamp 控制，移除固定 padding 覆盖 */
       /* 装饰性 SVG */
       .art{position:absolute; inset:auto -40px -40px auto; opacity:.22; filter:drop-shadow(0 12px 24px rgba(13,70,150,.18))}
-      .art svg{width:200px; height:200px; display:block}
-      @media (max-width:640px){ .inner{padding:28px} .art{display:none} }
+      .art svg{width:clamp(160px, 20vw, 240px); height:clamp(160px, 20vw, 240px); display:block}
+      @media (max-width:640px){ .art{display:none} .desc{max-width:48ch} }
     </style>
   </head>
   <body>
