@@ -331,14 +331,41 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
   .portfolio-grid{grid-template-columns:1fr}
   .portfolio-grid.mixed{grid-template-columns:1fr}
   .footer-inner{flex-direction:column}
-  .hero{padding:58px 0 36px;min-height:30vh}
-  .hero-title{font-size:46px;margin-bottom:16px}
-  .tagline{font-size:16px}
   .portfolio-grid.masonry{column-count:1}
   .portfolio-grid.carousel{gap:12px}
   .portfolio-grid.carousel .work-card{width:85vw}
   .portfolio-grid.carousel .work-card.featured{width:90vw}
   .portfolio-row{gap:12px;grid-template-columns:1fr}
+}
+
+/* 超小屏（≤360px）：进一步缩小标题与容器内边距，避免溢出 */
+@media (max-width:360px){
+  .container{padding:0 12px}
+  .hero-title{font-size:32px;letter-spacing:.5px}
+  .tagline{font-size:15px}
+}
+
+/* 桌面拓展（≥1280px）：提升网格密度 */
+@media (min-width:1280px){
+  .portfolio-grid.mixed{grid-template-columns:repeat(4,1fr)}
+  .portfolio-row{grid-template-columns:repeat(4,1fr)}
+  .portfolio-grid.masonry{column-count:4}
+}
+
+/* 超宽屏（≥1600px、≥1920px）：进一步增加列数与图片列宽 */
+@media (min-width:1600px){
+  .portfolio-grid.masonry{column-count:5}
+}
+@media (min-width:1920px){
+  .portfolio-grid.masonry{column-count:6}
+}
+
+/* 设计瀑布流：在大屏增加列数与列宽（不影响小屏既有规则） */
+@media (min-width:1600px){
+  .design-masonry{columns:5 300px}
+}
+@media (min-width:1920px){
+  .design-masonry{columns:6 320px}
 }
 /* Modal 弹窗播放器 */
 .video-modal{position:fixed;inset:0;display:none;z-index:1000}
