@@ -428,6 +428,8 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 .back-top{position:fixed;bottom:20px;right:20px;width:44px;height:44px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#2f7dff,#62c8ff);color:#fff;font-size:20px;font-weight:700;cursor:pointer;z-index:60;opacity:0;transform:translateY(8px);transition:opacity .25s ease, transform .25s ease;box-shadow:0 10px 30px rgba(47,125,255,.35)}
 .back-top.show{opacity:.95;transform:translateY(0)}
 .back-top:focus{outline:2px solid #fff3}
+/* 回到顶部 SVG 图标尺寸与点击体验 */
+.back-top .icon{width:22px;height:22px;display:block;pointer-events:none}
 @media (max-width:640px){.back-top{width:48px;height:48px}}
 
 /* 设计瀑布流：极简，仅列布局；滚动由外框控制 */
