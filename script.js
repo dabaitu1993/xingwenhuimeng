@@ -238,7 +238,9 @@
 
   // 封面海报回退：若自定义海报不存在，回退到通用占位图
   function applyPosterWithFallback(v){
-    const placeholder = toTosUrl('assets/images/video-placeholder.svg');
+    // 内置占位图（SVG）避免跨域与 ORB 阻断
+    const placeholderSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720"><rect fill="#0b1f3a" width="1280" height="720"/><circle cx="640" cy="360" r="64" fill="#2f7dff"/><polygon points="620,330 700,360 620,390" fill="#ffffff"/></svg>';
+    const placeholder = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(placeholderSvg);
     const desired = (v && v.dataset && v.dataset.poster) ? v.dataset.poster : null;
     if(desired){
       const img = new Image();
