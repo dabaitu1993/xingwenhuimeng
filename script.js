@@ -243,7 +243,11 @@
     const url = (v && v.dataset && v.dataset.src) ? v.dataset.src : null;
     // 仅视频卡片显示播放按钮与点击播放
     if(cover && v && !cover.querySelector('.cover-play')){
-      const btn = document.createElement('button'); btn.className = 'cover-play'; btn.setAttribute('aria-label','播放'); btn.textContent = '▶'; cover.appendChild(btn);
+      const btn = document.createElement('button');
+      btn.className = 'cover-play';
+      btn.setAttribute('aria-label','播放');
+      btn.innerHTML = '<svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="26" height="26" aria-hidden="true" focusable="false"><path d="M893.035 463.821679C839.00765 429.699141 210.584253 28.759328 179.305261 8.854514 139.495634-16.737389 99.686007 17.385148 99.686007 57.194775v909.934329c0 45.496716 42.653172 68.245075 76.775709 48.340262 45.496716-28.435448 676.763657-429.375262 716.573284-454.967165 34.122537-22.748358 34.122537-76.775709 0-96.680522z" fill="#ffffff"></path></svg>';
+      cover.appendChild(btn);
       btn.addEventListener('click',(ev)=>{ ev.stopPropagation(); if(url) openVideo(url); });
     }
     if(cover && v && url){ cover.addEventListener('click', ()=> openVideo(url)); }
@@ -331,7 +335,11 @@
           // 懒加载与播放交互绑定（仅视频）
           preloadInViewVideo.observe(v);
           if(!cover.querySelector('.cover-play')){
-            const btn = document.createElement('button'); btn.className = 'cover-play'; btn.setAttribute('aria-label','播放'); btn.textContent = '▶'; cover.appendChild(btn);
+            const btn = document.createElement('button');
+            btn.className = 'cover-play';
+            btn.setAttribute('aria-label','播放');
+            btn.innerHTML = '<svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="26" height="26" aria-hidden="true" focusable="false"><path d="M893.035 463.821679C839.00765 429.699141 210.584253 28.759328 179.305261 8.854514 139.495634-16.737389 99.686007 17.385148 99.686007 57.194775v909.934329c0 45.496716 42.653172 68.245075 76.775709 48.340262 45.496716-28.435448 676.763657-429.375262 716.573284-454.967165 34.122537-22.748358 34.122537-76.775709 0-96.680522z" fill="#ffffff"></path></svg>';
+            cover.appendChild(btn);
             btn.addEventListener('click',(ev)=>{ ev.stopPropagation(); openVideo(url); });
           }
           cover.addEventListener('click', ()=> openVideo(url));
