@@ -70,7 +70,7 @@ body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:40vh;z-i
 .hero{position:relative;padding:72px 0 40px;min-height:36vh;background:
   linear-gradient(180deg, rgba(10,36,74,.15) 0%, rgba(255,255,255,0) 40%),
   linear-gradient(0deg, rgba(10,36,74,.25), rgba(10,36,74,.25)),
-  url('assets/images/banner.jpg') center/cover no-repeat;
+  url('assets/images/posters/banner.jpg') center/cover no-repeat;
 }
 .hero-inner{position:relative;z-index:1}
 /* Hero 背景轻量微动光晕（增强可见性，仍保持轻量） */

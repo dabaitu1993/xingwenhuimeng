@@ -200,8 +200,8 @@
 
   // 封面海报回退：若自定义海报不存在，回退到通用占位图
   function applyPosterWithFallback(v){
-    // 使用本地占位图文件
-    const placeholder = 'assets/images/video-placeholder.svg';
+    // 使用本地占位图文件（位于 posters 文件夹）
+    const placeholder = 'assets/images/posters/video-placeholder.svg';
     const desired = (v && v.dataset && v.dataset.poster) ? v.dataset.poster : null;
     if(desired){
       const img = new Image();
