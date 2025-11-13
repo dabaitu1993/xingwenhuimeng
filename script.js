@@ -734,7 +734,7 @@
     let dpr = Math.max(1, Math.min(2.5, window.devicePixelRatio || 1));
     // 桌面端加速：指针为精细(pointer:fine)或宽度>=1024且非移动设备
     const isDesktopFast = window.matchMedia('(pointer: fine)').matches || (window.innerWidth >= 1024 && !/Mobi/i.test(navigator.userAgent));
-    const speedFactor = isDesktopFast ? 1.8 : 1.0;       // 位移速度放大
+    const speedFactor = isDesktopFast ? 2.2 : 1.3;       // 位移速度略增（桌面/移动）
     const twinkleFactor = isDesktopFast ? 1.6 : 1.0;     // 明暗呼吸速度放大
     function resize(){
       const w = window.innerWidth, h = window.innerHeight;
@@ -810,13 +810,10 @@
       ctx.globalCompositeOperation = prevComp;
     }
 
-    // 连接线：帧间节流 + 简易空间网格剔除，显著降低比较次数
-    let skip = 0;
+    // 连接线：每帧绘制 + 简易空间网格剔除；避免重复配对消除闪烁
     function connect(){
-      const mod = isDesktopFast ? 2 : 3; // 每2/3帧画一次连接线
-      skip = (skip+1)%mod; if(skip!==0) return;
-      ctx.lineWidth = 0.8 / dpr;
-      const cell = 120;
+      ctx.lineWidth = 1.05 / dpr; // 线宽微增，更显眼但不过分
+      const cell = Math.max(80, Math.min(linkDist, 140));
       const cols = Math.ceil(window.innerWidth / cell);
       const rows = Math.ceil(window.innerHeight / cell);
       const grid = Array.from({length: cols*rows}, ()=>[]);
@@ -826,26 +823,49 @@
         const gy = Math.min(rows-1, Math.max(0, Math.floor(p.y / cell)));
         grid[idx(gx,gy)].push(p);
       }
+      // 仅与同格以及右、下、右下邻格连接，避免重复绘制同一对
+      const neighbors = [ [0,0],[1,0],[0,1],[1,1] ];
       for(let gy=0; gy<rows; gy++){
         for(let gx=0; gx<cols; gx++){
           const bucket = grid[idx(gx,gy)];
-          // 与同格及相邻8格尝试连接
-          for(const neighbor of [ [0,0],[1,0],[0,1],[1,1],[-1,0],[0,-1],[-1,-1],[1,-1],[-1,1] ]){
-            const nx = gx + neighbor[0], ny = gy + neighbor[1];
+          for(const [dxCell, dyCell] of neighbors){
+            const nx = gx + dxCell, ny = gy + dyCell;
             if(nx<0||ny<0||nx>=cols||ny>=rows) continue;
             const bucket2 = grid[idx(nx,ny)];
-            for(const a of bucket){
-              for(const b of bucket2){
-                if(a===b) continue;
-                const dx = a.x - b.x; const dy = a.y - b.y; const d = Math.sqrt(dx*dx + dy*dy);
-                if(d < linkDist){
-                  const t = 1 - d/linkDist;
-                  const lineAlpha = Math.max(0.06, 0.22 * t);
-                  ctx.beginPath();
-                  ctx.strokeStyle = `rgba(255,255,255,${lineAlpha})`;
-                  ctx.moveTo(a.x, a.y);
-                  ctx.lineTo(b.x, b.y);
-                  ctx.stroke();
+            if(dxCell===0 && dyCell===0){
+              // 同格配对：仅 j>i，避免重复
+              for(let i=0;i<bucket.length;i++){
+                const a = bucket[i];
+                for(let j=i+1;j<bucket.length;j++){
+                  const b = bucket[j];
+                  const dx = a.x - b.x; const dy = a.y - b.y; const d = Math.sqrt(dx*dx + dy*dy);
+                  if(d < linkDist){
+                    const t = 1 - d/linkDist;
+                    const tSmooth = t*t; // 降低阈值附近的敏感度，减少闪烁
+                    const lineAlpha = Math.max(0.10, 0.26 * tSmooth);
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(255,255,255,${lineAlpha})`;
+                    ctx.moveTo(a.x, a.y);
+                    ctx.lineTo(b.x, b.y);
+                    ctx.stroke();
+                  }
+                }
+              }
+            }else{
+              // 邻格配对：与另一格中的所有点连接
+              for(const a of bucket){
+                for(const b of bucket2){
+                  const dx = a.x - b.x; const dy = a.y - b.y; const d = Math.sqrt(dx*dx + dy*dy);
+                  if(d < linkDist){
+                    const t = 1 - d/linkDist;
+                    const tSmooth = t*t; // 降低阈值附近的敏感度，减少闪烁
+                    const lineAlpha = Math.max(0.10, 0.26 * tSmooth);
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(255,255,255,${lineAlpha})`;
+                    ctx.moveTo(a.x, a.y);
+                    ctx.lineTo(b.x, b.y);
+                    ctx.stroke();
+                  }
                 }
               }
             }
