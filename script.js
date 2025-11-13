@@ -702,6 +702,10 @@
 
     // 设备像素比适配，保证外发光清晰
     let dpr = Math.max(1, Math.min(2.5, window.devicePixelRatio || 1));
+    // 桌面端加速：指针为精细(pointer:fine)或宽度>=1024且非移动设备
+    const isDesktopFast = window.matchMedia('(pointer: fine)').matches || (window.innerWidth >= 1024 && !/Mobi/i.test(navigator.userAgent));
+    const speedFactor = isDesktopFast ? 1.8 : 1.0;       // 位移速度放大
+    const twinkleFactor = isDesktopFast ? 1.6 : 1.0;     // 明暗呼吸速度放大
     function resize(){
       const w = window.innerWidth, h = window.innerHeight;
       canvas.style.width = w + 'px';
@@ -746,12 +750,12 @@
         x: Math.random()*window.innerWidth,
         y: Math.random()*window.innerHeight,
         r,
-        vx: (Math.random()*0.36 - 0.18),
-        vy: (Math.random()*0.36 - 0.18),
+        vx: (Math.random()*0.36*speedFactor - 0.18*speedFactor),
+        vy: (Math.random()*0.36*speedFactor - 0.18*speedFactor),
         bright: r >= 4.8,
         color: pickStarColor(),
         twinklePhase: Math.random()*Math.PI*2,
-        twinkleSpeed: 0.5 + Math.random()*1.2,
+        twinkleSpeed: (0.5 + Math.random()*1.2) * twinkleFactor,
         twinkleAmp: r >= 4.8 ? 0.50 : (r >= 2.4 ? 0.27 : 0.12),
       });
     }
@@ -809,7 +813,7 @@
         let baseAlpha = Math.min(1, 0.34 + p.r*0.09);
         // 周期性明暗交替：所有星以不同强度呼吸，亮星更明显
         if(p.twinkleAmp > 0){
-          p.twinklePhase += 0.014 * p.twinkleSpeed;
+          p.twinklePhase += 0.014 * p.twinkleSpeed; // twinkleSpeed 已含桌面加速因子
           const s = 0.5 + 0.5*Math.sin(p.twinklePhase); // 0..1
           const sCurve = Math.pow(s, 1.8); // 非线性曲线，增强高光阶段
           const breathe = baseAlpha*(1-p.twinkleAmp) + baseAlpha*p.twinkleAmp*sCurve;
